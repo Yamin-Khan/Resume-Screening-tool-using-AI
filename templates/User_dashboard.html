@@ -1,0 +1,417 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Dashboard Header -->
+        <div class="glass-card p-8 rounded-2xl shadow-xl mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Dashboard</h1>
+                    <p class="text-white text-opacity-70 mt-1">Welcome back, {{ user.username }}</p>
+                </div>
+                <a href="{% url 'upload_resume' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full flex items-center gap-2 transition duration-200">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload New Resume</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <div class="flex items-center">
+                    <div class="bg-blue-500 bg-opacity-20 p-3 rounded-full mr-4">
+                        <i class="fas fa-file-alt text-blue-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-white text-opacity-70">Total Resumes</p>
+                        <h3 class="text-3xl font-bold text-white">{{ resume_count }}</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <div class="flex items-center">
+                    <div class="bg-green-500 bg-opacity-20 p-3 rounded-full mr-4">
+                        <i class="fas fa-check-circle text-green-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-white text-opacity-70">High ATS Scores</p>
+                        <h3 class="text-3xl font-bold text-white">{{ high_score_count }}</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <div class="flex items-center">
+                    <div class="bg-yellow-500 bg-opacity-20 p-3 rounded-full mr-4">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-white text-opacity-70">Needs Improvement</p>
+                        <h3 class="text-3xl font-bold text-white">{{ low_score_count }}</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <div class="flex items-center">
+                    <div class="bg-purple-500 bg-opacity-20 p-3 rounded-full mr-4">
+                        <i class="fas fa-chart-line text-purple-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-white text-opacity-70">Avg. ATS Score</p>
+                        <h3 class="text-3xl font-bold text-white">{{ avg_score }}%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- ATS Score Distribution Chart -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <h2 class="text-xl font-bold text-white mb-4">ATS Score Distribution</h2>
+                <div class="h-64">
+                    <canvas id="atsScoreChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Resume Analysis Timeline Chart -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <h2 class="text-xl font-bold text-white mb-4">Resume Score Timeline</h2>
+                <div class="h-64">
+                    <canvas id="scoreTimelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Analyses & Resume Management -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Recent Analyses -->
+            <div class="lg:col-span-2">
+                <div class="glass-card p-8 rounded-2xl shadow-xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white">Recent Resume Analyses</h2>
+                        <a href="{% url 'user_resume_list' %}" class="text-blue-400 hover:text-blue-300 transition">
+                            View All <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    {% if recent_analyses %}
+                        <div class="space-y-4">
+                            {% for analysis in recent_analyses %}
+                                <div class="bg-white bg-opacity-10 rounded-xl p-4 hover:bg-opacity-20 transition duration-200">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h3 class="text-lg font-medium text-white">{{ analysis.file_name }}</h3>
+                                            <div class="flex items-center mt-1">
+                                                {% if analysis.job_title %}
+                                                    <span class="text-white text-opacity-90 text-sm">{{ analysis.job_title }}</span>
+                                                {% endif %}
+                                                {% if analysis.industry %}
+                                                    <span class="mx-2 text-white text-opacity-50">•</span>
+                                                    <span class="text-white text-opacity-90 text-sm">{{ analysis.industry }}</span>
+                                                {% endif %}
+                                            </div>
+                                            <p class="text-white text-opacity-70 text-xs mt-2">{{ analysis.created_at|date:"F j, Y, g:i a" }}</p>
+                                        </div>
+                                        <div class="flex flex-col items-end">
+                                            <div class="flex items-center mb-1">
+                                                <span class="text-lg font-bold 
+                                                    {% if analysis.ats_score >= 80 %}text-green-400
+                                                    {% elif analysis.ats_score >= 60 %}text-blue-400
+                                                    {% elif analysis.ats_score >= 40 %}text-yellow-400
+                                                    {% else %}text-red-400{% endif %}">
+                                                    {{ analysis.ats_score }}%
+                                                </span>
+                                                <span class="text-white text-opacity-90 text-xs ml-1">ATS Score</span>
+                                            </div>
+                                            <a href="{% url 'resume_detail' analysis.id %}" class="mt-2 text-blue-400 text-sm hover:text-blue-300 transition">
+                                                View Analysis <i class="fas fa-chevron-right ml-1"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-12 bg-white bg-opacity-10 rounded-lg">
+                            <div class="bg-blue-500 bg-opacity-20 p-4 rounded-full inline-flex justify-center mb-4">
+                                <i class="fas fa-file-alt text-blue-400 text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-medium text-white mb-2">No Resume Analyses Yet</h3>
+                            <p class="text-white text-opacity-90 mb-6">Upload your first resume to get started with ATS scoring and optimization</p>
+                            <a href="{% url 'upload_resume' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full inline-flex items-center gap-2 transition">
+                                <i class="fas fa-upload"></i>
+                                <span>Upload Resume</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Resume Insights -->
+            <div class="lg:col-span-1">
+                <div class="glass-card p-8 rounded-2xl shadow-xl mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-6">Resume Insights</h2>
+                    
+                    {% if resume_count > 0 %}
+                        <div class="space-y-6">
+                            <!-- Top Skills -->
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-3 flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-2"></i>
+                                    Top Skills
+                                </h3>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for skill in top_skills %}
+                                        <span class="bg-blue-900/30 text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-800">{{ skill }}</span>
+                                    {% empty %}
+                                        <span class="text-white text-opacity-80">No skill data available</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Common Issues -->
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-3 flex items-center">
+                                    <i class="fas fa-exclamation-circle text-red-400 mr-2"></i>
+                                    Common Issues
+                                </h3>
+                                <ul class="space-y-2 pl-6 list-disc text-white text-opacity-90">
+                                    {% for issue in common_issues %}
+                                        <li>{{ issue }}</li>
+                                    {% empty %}
+                                        <li class="text-white text-opacity-80">No issue data available</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            
+                            <!-- Skills to Add -->
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-3 flex items-center">
+                                    <i class="fas fa-plus-circle text-green-400 mr-2"></i>
+                                    Recommended Skills
+                                </h3>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for skill in recommended_skills %}
+                                        <span class="bg-green-900/30 text-green-300 text-xs px-3 py-1 rounded-full border border-green-800">{{ skill }}</span>
+                                    {% empty %}
+                                        <span class="text-white text-opacity-80">No skill recommendations available</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-8 bg-white bg-opacity-10 rounded-lg">
+                            <p class="text-white text-opacity-90">Upload resumes to see personalized insights</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="glass-card p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl font-bold text-white mb-6">Quick Actions</h2>
+                    <div class="space-y-4">
+                        <a href="{% url 'upload_resume' %}" class="flex items-center p-3 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition">
+                            <div class="bg-blue-500 bg-opacity-20 p-2 rounded-full mr-3">
+                                <i class="fas fa-upload text-blue-400"></i>
+                            </div>
+                            <span class="text-white">Upload New Resume</span>
+                        </a>
+                        
+                        <a href="{% url 'user_resume_list' %}" class="flex items-center p-3 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition">
+                            <div class="bg-green-500 bg-opacity-20 p-2 rounded-full mr-3">
+                                <i class="fas fa-th-list text-green-400"></i>
+                            </div>
+                            <span class="text-white">View All Resumes</span>
+                        </a>
+                        
+                        <a href="{% url 'profile' %}" class="flex items-center p-3 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition">
+                            <div class="bg-purple-500 bg-opacity-20 p-2 rounded-full mr-3">
+                                <i class="fas fa-user text-purple-400"></i>
+                            </div>
+                            <span class="text-white">Update Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add subscription info section -->
+        {% if user.is_business_user %}
+        <div class="card glass-card mb-4 overflow-hidden">
+            <div class="card-header bg-blue-600 bg-opacity-30 text-white py-3 px-4">
+                <h4 class="m-0 font-weight-bold">Subscription Information</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <h5 class="text-white opacity-70">Current Plan</h5>
+                        <h2 class="text-blue-400 font-weight-bold">{{ subscription_plan }}</h2>
+                        <span class="badge {% if subscription_active %}bg-success{% else %}bg-danger{% endif %} my-2">
+                            {% if subscription_active %}Active{% else %}Expired{% endif %}
+                        </span>
+                    </div>
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <h5 class="text-white opacity-70">Resume Usage</h5>
+                        <h2 class="text-yellow-400 font-weight-bold">{{ resumes_screened }} / {{ resumes_limit }}</h2>
+                        <div class="progress mt-2 glass-card overflow-hidden" style="height: 10px;">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                style="width: {% widthratio resumes_screened|default:0 resumes_limit 100 %}%" 
+                                aria-valuenow="{{ resumes_screened }}" aria-valuemin="0" aria-valuemax="{{ resumes_limit }}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h5 class="text-white opacity-70">Remaining</h5>
+                        <h2 class="text-green-400 font-weight-bold">{{ remaining_resumes }}</h2>
+                        <a href="{% url 'pricing' %}" class="btn btn-blue mt-2">Upgrade Plan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ATS Score Distribution Chart
+        const atsScoreCtx = document.getElementById('atsScoreChart').getContext('2d');
+        const atsScoreChart = new Chart(atsScoreCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Excellent (80-100)', 'Good (60-79)', 'Average (40-59)', 'Needs Work (<40)'],
+                datasets: [{
+                    data: [{{ high_score_count }}, {{ medium_score_count }}, {{ average_score_count }}, {{ low_score_count }}],
+                    backgroundColor: [
+                        'rgba(72, 187, 120, 0.8)',  // green
+                        'rgba(66, 153, 225, 0.8)',  // blue
+                        'rgba(236, 201, 75, 0.8)',  // yellow
+                        'rgba(245, 101, 101, 0.8)'  // red
+                    ],
+                    borderColor: [
+                        'rgba(72, 187, 120, 1)',
+                        'rgba(66, 153, 225, 1)',
+                        'rgba(236, 201, 75, 1)',
+                        'rgba(245, 101, 101, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 10
+                    }
+                }
+            }
+        });
+
+        // Resume Score Timeline Chart
+        const timelineCtx = document.getElementById('scoreTimelineChart').getContext('2d');
+        const scoreTimelineChart = new Chart(timelineCtx, {
+            type: 'line',
+            data: {
+                labels: [{% for analysis in recent_timeline %}'{{ analysis.created_at|date:"M d" }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [{
+                    label: 'ATS Score',
+                    data: [{% for analysis in recent_timeline %}{{ analysis.ats_score }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    backgroundColor: 'rgba(66, 153, 225, 0.2)',
+                    borderColor: 'rgba(66, 153, 225, 1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: 'rgba(66, 153, 225, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(66, 153, 225, 1)',
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)',
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)',
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.8)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        callbacks: {
+                            label: function(context) {
+                                return 'ATS Score: ' + context.raw + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

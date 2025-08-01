@@ -1,0 +1,17 @@
+
+Sophia Jackson
+sophia.jackson@example.com | +1-970-947-9683
+
+SKILLS
+Data Analysis, Angular, C++, AWS, Azure, Communication, Problem Solving
+
+EXPERIENCE
+3 years of experience as a Data Scientist at Microsoft, building machine learning models.
+
+6 years of experience as a Full Stack Developer at Netflix, implementing end-to-end solutions.
+
+EDUCATION
+Bachelor of Arts in Communication, Columbia University
+
+PhD in Computer Science, Carnegie Mellon University
+            

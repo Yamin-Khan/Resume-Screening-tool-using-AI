@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Page Title -->
+            <div class="glass-card p-5 mb-5 text-white text-center">
+                <h1 class="display-4 fw-bold mb-3">Contact Us</h1>
+                <p class="lead">Have questions? We're here to help you get the most out of our resume screening solution.</p>
+            </div>
+            
+            <div class="row g-5">
+                <!-- Contact Form -->
+                <div class="col-lg-7">
+                    <div class="glass-card p-5 text-white">
+                        <h2 class="h3 mb-4">Send us a message</h2>
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <form method="post" action="{% url 'contact' %}">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">Your Name</label>
+                                {% if user.is_authenticated %}
+                                    <input type="text" 
+                                           value="{{ user.first_name|default:user.username }}" 
+                                           class="form-control bg-gray-100 text-black" 
+                                           readonly>
+                                {% else %}
+                                    {{ form.name }}
+                                {% endif %}
+                                {% if form.name.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Email Address</label>
+                                {% if user.is_authenticated %}
+                                    <input type="email" 
+                                           value="{{ user.email }}" 
+                                           class="form-control bg-gray-100 text-black" 
+                                           readonly>
+                                {% else %}
+                                    {{ form.email }}
+                                {% endif %}
+                                {% if form.email.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.email.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.message.id_for_label }}" class="form-label">Message</label>
+                                {{ form.message }}
+                                {% if form.message.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.message.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="col-lg-5">
+                    <div class="glass-card p-5 text-white">
+                        <h2 class="h3 mb-4">Contact Information</h2>
+                        <div class="mb-4">
+                            <h3 class="h5 mb-2">Email</h3>
+                            <p class="mb-0">support@resumescreening.com</p>
+                        </div>
+                        <div class="mb-4">
+                            <h3 class="h5 mb-2">Phone</h3>
+                            <p class="mb-0">+44 (0) 1223 456789</p>
+                        </div>
+                        <div>
+                            <h3 class="h5 mb-2">Address</h3>
+                            <p class="mb-0">The Bradfield Centre<br>184 Cambridge Science Park<br>Milton Road<br>Cambridge<br>CB4 0GA<br>United Kingdom</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map -->
+            <div class="glass-card p-5 mt-5 text-white">
+                <h2 class="h3 mb-4">Find us</h2>
+                <div class="ratio ratio-16x9">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.530480920045!2d0.143537676516049!3d52.233747571987536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d870545e4ef491%3A0x410ce131c2898905!2sThe%20Bradfield%20Centre!5e0!3m2!1sen!2suk!4v1745328513950!5m2!1sen!2suk" 
+                        width="600" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="glass-card p-5 mt-5 text-white">
+                <h2 class="h3 mb-4 text-center">Frequently Asked Questions</h2>
+                
+                <div class="accordion" id="contactFAQ">
+                    <div class="accordion-item bg-transparent">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false">
+                                How quickly can I expect a response to my inquiry?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#contactFAQ">
+                            <div class="accordion-body text-white">
+                                We aim to respond to all inquiries within 24 business hours. For urgent matters, please call our support line for immediate assistance.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item bg-transparent">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false">
+                                Do you offer custom solutions for enterprise clients?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#contactFAQ">
+                            <div class="accordion-body text-white">
+                                Yes, we offer customized solutions tailored to the specific needs of enterprise clients. Please contact our sales team through this form to discuss your requirements.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item bg-transparent">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false">
+                                Is there a free trial available for your services?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#contactFAQ">
+                            <div class="accordion-body text-white">
+                                Yes, we offer a 14-day free trial for all new users. You can sign up on our website without providing credit card information. If you need an extended trial period, please reach out to our sales team.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item bg-transparent">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="true">
+                                How can I schedule a demo of your platform?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse " aria-labelledby="headingFour" data-bs-parent="#contactFAQ">
+                            <div class="accordion-body text-white">
+                                You can schedule a demo by contacting us through this form or by calling our sales team directly. Please mention your preferred date and time, and we'll do our best to accommodate your schedule.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: rgb(12,36,52);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background-color: rgb(10,30,45);
+    }
+    
+    .btn-outline-light {
+        border: 2px solid rgb(12,36,52);
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-light:hover {
+        background-color: rgb(12,36,52);
+    }
+    
+    .accordion-button:after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+    .accordion-button:not(.collapsed) {
+        color: white;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: none;
+    }
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    .accordion-item {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %} 

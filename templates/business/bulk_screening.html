@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bulk Resume Screening - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex">
+    <!-- Include the sidebar -->
+    {% include 'business/sidebar.html' with active='bulk_screening' %}
+
+    <div class="flex-1 bg-gray-900">
+        <div class="container mx-auto px-4 py-8">
+            <div class="glass-card p-6 mb-8 rounded-xl shadow-xl border border-gray-700/50 backdrop-blur-sm">
+                <h1 class="text-3xl font-bold mb-2 gradient-light-alt">Bulk Resume Screening</h1>
+                <p class="text-gray-300 mb-6 text-lg">Screen multiple resumes at once against a job posting to find the best candidates.</p>
+                
+                {% if messages %}
+                <div class="mb-6 animate__animated animate__fadeIn">
+                    {% for message in messages %}
+                    <div class="p-4 mb-3 rounded-lg shadow-md {% if message.tags == 'success' %}bg-green-800/40 border border-green-600/50{% elif message.tags == 'error' %}bg-red-800/40 border border-red-600/50{% elif message.tags == 'warning' %}bg-yellow-800/40 border border-yellow-600/50{% else %}bg-blue-800/40 border border-blue-600/50{% endif %}">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                {% if message.tags == 'success' %}
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                {% elif message.tags == 'error' %}
+                                <i class="fas fa-exclamation-circle text-red-400"></i>
+                                {% elif message.tags == 'warning' %}
+                                <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                                {% else %}
+                                <i class="fas fa-info-circle text-blue-400"></i>
+                                {% endif %}
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-200">{{ message }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="bg-gray-800/30 p-4 rounded-xl mb-6 border border-gray-700/40 shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-blue-600/80 rounded-full shadow-lg">
+                            <i class="fas fa-file-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-semibold text-white">Resume Screening Quota</h2>
+                            <p class="text-sm text-gray-300">You have <span class="text-blue-400 font-semibold">{{ remaining_resumes }}</span> resumes left in your current plan</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800/30 p-6 rounded-xl border border-gray-700/40 shadow-lg hover:border-blue-700/40 transition duration-300">
+                    <h2 class="text-xl font-semibold mb-6 text-white">Enter Job Requirements</h2>
+                    <form method="POST" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="job_title" class="block text-sm font-medium text-gray-300 mb-2">Job Title <span class="text-blue-400">*</span></label>
+                            <input type="text" id="job_title" name="job_title" class="form-input text-white bg-gray-800/70 border-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-500/30 rounded-lg shadow-sm w-full transition duration-200" placeholder="e.g. Software Engineer" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="job_description" class="block text-sm font-medium text-gray-300 mb-2">Job Description <span class="text-blue-400">*</span></label>
+                            <textarea id="job_description" name="job_description" rows="5" class="form-textarea text-white bg-gray-800/70 border-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-500/30 rounded-lg shadow-sm w-full transition duration-200" placeholder="Enter a detailed job description..." required></textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="required_skills" class="block text-sm font-medium text-gray-300 mb-2">Required Skills (comma-separated) <span class="text-blue-400">*</span></label>
+                            <input type="text" id="required_skills" name="required_skills" class="form-input text-white bg-gray-800/70 border-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-500/30 rounded-lg shadow-sm w-full transition duration-200" placeholder="e.g. Python, Django, JavaScript, React" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="preferred_experience" class="block text-sm font-medium text-gray-300 mb-2">Preferred Experience (years)</label>
+                            <input type="number" id="preferred_experience" name="preferred_experience" min="0" step="1" class="form-input text-white bg-gray-800/70 border-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-500/30 rounded-lg shadow-sm w-full transition duration-200" value="0">
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button type="submit" class="btn-gradient px-6 py-3 text-base font-medium rounded-lg shadow-lg transition duration-300 flex items-center">
+                                <i class="fas fa-arrow-right mr-2"></i> Continue to Upload Resumes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            {% if recent_screenings %}
+            <div class="glass-card p-6 rounded-xl shadow-xl border border-gray-700/50 backdrop-blur-sm">
+                <h2 class="text-2xl font-semibold mb-6 gradient-light">Recent Screening Sessions</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-700/80 shadow-lg">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-gray-800/40 rounded-tl-lg">Job Title</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-gray-800/40">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-gray-800/40">Resumes</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-gray-800/40">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-gray-800/40 rounded-tr-lg">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gray-800/20 divide-y divide-gray-700/50">
+                            {% for screening in recent_screenings %}
+                            <tr class="hover:bg-gray-700/20 transition duration-150 ease-in-out">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">{{ screening.job_title }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ screening.created_at|date:"M d, Y" }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ screening.resumes_count }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full shadow-sm
+                                    {% if screening.status == 'completed' %}bg-green-900/70 text-green-100 border border-green-700/50
+                                    {% elif screening.status == 'processing' %}bg-blue-900/70 text-blue-100 border border-blue-700/50
+                                    {% elif screening.status == 'failed' %}bg-red-900/70 text-red-100 border border-red-700/50
+                                    {% else %}bg-yellow-900/70 text-yellow-100 border border-yellow-700/50{% endif %}">
+                                        {{ screening.status|title }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <div class="flex items-center gap-2">
+                                        {% if screening.status == 'completed' %}
+                                        <a href="{% url 'bulk_screening_results' bulk_id=screening.id %}" class="text-blue-400 hover:text-blue-300 transition duration-150 flex items-center">
+                                            <i class="fas fa-chart-bar mr-1"></i> View Results
+                                        </a>
+                                        {% elif screening.status == 'pending' %}
+                                        <span class="text-gray-500 flex items-center">
+                                            <i class="fas fa-hourglass-start mr-1"></i> Awaiting Upload
+                                        </span>
+                                        <a href="{% url 'bulk_upload_resumes_with_id' bulk_id=screening.id %}" class="btn-gradient-secondary px-3 py-1 text-xs rounded-lg ml-2 flex items-center gap-1">
+                                            <i class="fas fa-upload"></i> Upload Resumes
+                                        </a>
+                                        {% elif screening.status == 'processing' %}
+                                        <span class="text-gray-500 flex items-center">
+                                            <i class="fas fa-spinner fa-spin mr-1"></i> Processing...
+                                        </span>
+                                        {% else %}
+                                        <span class="text-red-500 flex items-center">
+                                            <i class="fas fa-exclamation-circle mr-1"></i> Failed
+                                        </span>
+                                        <a href="{% url 'bulk_upload_resumes_with_id' bulk_id=screening.id %}" class="btn-gradient-secondary px-3 py-1 text-xs rounded-lg ml-2 flex items-center gap-1">
+                                            <i class="fas fa-redo"></i> Retry
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="mt-8 text-center">
+                <a href="{% url 'job_portal_integration' %}" class="inline-flex items-center px-5 py-3 bg-gray-800/80 hover:bg-gray-700/80 text-gray-300 rounded-lg border border-gray-600/50 hover:border-blue-600/50 shadow-lg transition duration-300">
+                    <i class="fas fa-link mr-2 text-blue-400"></i> Connect to Job Portal
+                    <span class="ml-2 text-xs px-2 py-1 bg-blue-900/70 text-blue-300 rounded-full border border-blue-700/50">Coming Soon</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.btn-gradient {
+    background: linear-gradient(to right, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+.btn-gradient:hover {
+    background: linear-gradient(to right, #2563eb, #1d4ed8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+.btn-gradient-secondary {
+    background: linear-gradient(to right, #4f46e5, #4338ca);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+.btn-gradient-secondary:hover {
+    background: linear-gradient(to right, #4338ca, #3730a3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+</style>
+{% endblock %} 

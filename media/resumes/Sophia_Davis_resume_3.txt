@@ -1,0 +1,15 @@
+
+Sophia Davis
+sophia.davis@example.com | +1-283-193-1543
+
+SKILLS
+AWS, JavaScript, Node.js, C++, Django, Kubernetes, Data Analysis, React, Java
+
+EXPERIENCE
+6 years of experience as a Full Stack Developer at Netflix, implementing end-to-end solutions.
+
+2 years of experience as a Frontend Developer at Amazon, creating responsive web interfaces.
+
+EDUCATION
+Bachelor of Science in Computer Science, Stanford University
+            

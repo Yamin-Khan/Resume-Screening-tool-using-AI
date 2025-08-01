@@ -1,0 +1,1061 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div class="absolute -z-10 w-full h-full">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('{% static 'images/particles.svg' %}')] bg-repeat opacity-20"></div>
+    </div>
+    
+    <div class="container mx-auto px-4">
+        <div class="glass-card p-8 md:p-12 max-w-5xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 text-shadow">Unlock Your <span class="text-blue-400">Career</span> Potential</h1>
+                    <p class="text-xl md:text-2xl mb-8 text-gray-300">AI-powered resume screening to optimize your resume and find your dream job</p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="{% url 'upload_resume' %}" class="btn btn-primary px-8 py-3 text-lg flex items-center justify-center gap-2">
+                            <i class="fas fa-file-upload"></i> Upload Resume
+                        </a>
+                        {% if not request.user.business_profile %}
+                        <a href="#quick-check" class="btn btn-outline-light px-8 py-3 text-lg flex items-center justify-center gap-2">
+                            <i class="fas fa-robot"></i> Quick Check
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="animate-float">
+                            <img src="{% static 'images/hero.png' %}" alt="Resume Analysis" class="w-full">
+                        </div>
+                        <div class="absolute top-0 right-0 bg-green-500 text-white text-sm font-bold px-3 py-1 rounded-full">
+                            AI Powered
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+
+<!-- Quick Resume Check Section -->
+{% if not request.user.business_profile %}
+<section id="quick-check" class="mt-20 py-20 relative overflow-hidden" style="background-color: #1a2e44; border-top: 5px solid #3b82f6; border-bottom: 5px solid #3b82f6; padding: 40px 0; margin-top: 100px; margin-bottom: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+    <!-- Section Heading Marker -->
+    <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 10px 30px; border-radius: 30px; font-weight: bold; font-size: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 10;">
+        QUICK CHECK TOOL
+    </div>
+    
+    <div class="absolute -z-10 w-full h-full top-0 left-0">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('{% static 'images/particles.svg' %}')] bg-repeat opacity-50"></div>
+    </div>
+    
+    <div class="container mx-auto px-4">
+        <div class="ultra-glass p-8 max-w-4xl mx-auto" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3);">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-shadow" style="color: #ffffff;">Quick Resume Check</h2>
+            
+            <div class="mb-8 text-center">
+                <p class="text-xl text-gray-300 mb-6">Get your resume analyzed by our AI in seconds</p>
+                <div class="flex items-center justify-center gap-4 flex-wrap">
+                    <div class="feature-badge">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>ATS Score</span>
+                    </div>
+                    <div class="feature-badge">
+                        <i class="fas fa-search text-blue-400"></i>
+                        <span>Keyword Analysis</span>
+                    </div>
+                    <div class="feature-badge">
+                        <i class="fas fa-lightbulb text-yellow-400"></i>
+                        <span>Improvement Tips</span>
+                    </div>
+                    <div class="feature-badge">
+                        <i class="fas fa-bolt text-purple-400"></i>
+                        <span>Instant Feedback</span>
+                    </div>
+                </div>
+            </div>
+            
+            <form id="quick-check-form" class="space-y-6" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                <div class="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-8 hover:bg-white/10 transition duration-300" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <div class="flex items-center justify-center w-full">
+                        <label for="quick-resume" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-white/5 border-white/20 hover:bg-white/10 hover:border-blue-400 transition duration-300" style="background: rgba(255, 255, 255, 0.1); border: 2px dashed rgba(59, 130, 246, 0.5);">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <div class="upload-icon-container" style="background: rgba(59, 130, 246, 0.2); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-blue-400 mb-3 upload-icon" style="font-size: 36px; color: #60a5fa;"></i>
+                                </div>
+                                <p class="mb-2 text-sm text-gray-300"><span class="font-semibold" style="color: white;">Click to upload</span> or drag and drop</p>
+                                <p class="text-xs text-gray-400">PDF, DOCX, or TXT (MAX. 5MB)</p>
+                            </div>
+                            <input id="quick-resume" name="resume" type="file" class="hidden" accept=".pdf,.docx,.doc,.txt" />
+                        </label>
+                    </div>
+                    <div id="file-name-display" class="mt-3 text-center hidden">
+                        <p class="text-sm text-gray-300">Selected file: <span id="file-name-text" class="font-semibold text-blue-400"></span></p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <button type="submit" id="quick-check-button" class="glowing-btn disabled:opacity-50 disabled:cursor-not-allowed" disabled style="background: linear-gradient(45deg, #3b82f6, #1e40af); font-size: 18px; padding: 12px 30px; border-radius: 10px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); border: none;">
+                        <i class="fas fa-robot mr-2" style="color: white;"></i> Analyze Resume
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Results Section (Initially Hidden) -->
+            <div id="quick-results" class="mt-10 hidden">
+                <div class="p-6 rounded-lg border border-white/30 bg-white/5 backdrop-blur-lg">
+                    <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+                        <h3 class="text-2xl font-bold mb-4 md:mb-0 text-white">Resume Analysis Results</h3>
+                        <div class="flex items-center gap-4">
+                            <div class="score-pill">
+                                <div class="text-sm text-gray-400 mb-1">ATS Score</div>
+                                <div class="text-3xl font-bold text-blue-400" id="quick-ats-score">85%</div>
+                            </div>
+                            <div class="score-pill">
+                                <div class="text-sm text-gray-400 mb-1">Match Score</div>
+                                <div class="text-3xl font-bold text-green-400" id="quick-match-score">78%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="result-card strengths-card">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fas fa-thumbs-up text-green-400 mr-2"></i> Strengths
+                            </h4>
+                            <ul class="space-y-2 text-sm" id="quick-skills-list">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-400 mt-1 mr-2"></i>
+                                    <span>Strong technical skills section with relevant keywords</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-400 mt-1 mr-2"></i>
+                                    <span>Clear work experience with quantifiable achievements</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-400 mt-1 mr-2"></i>
+                                    <span>Education section properly formatted</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="result-card improvements-card">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fas fa-exclamation-circle text-yellow-400 mr-2"></i> Improvements
+                            </h4>
+                            <ul class="space-y-2 text-sm" id="quick-missing-list">
+                                <li class="flex items-start">
+                                    <i class="fas fa-times text-red-400 mt-1 mr-2"></i>
+                                    <span>Add more industry-specific keywords</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-times text-red-400 mt-1 mr-2"></i>
+                                    <span>Consider adding a professional summary</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-times text-red-400 mt-1 mr-2"></i>
+                                    <span>Use more action verbs in experience descriptions</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 result-card">
+                        <h4 class="font-bold text-lg mb-4">Keyword Analysis</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="quick-keywords-list">
+                            <div class="keyword-chip detected">
+                                <span class="font-medium">JavaScript</span>
+                                <div class="text-green-400 text-xs">Detected</div>
+                            </div>
+                            <div class="keyword-chip detected">
+                                <span class="font-medium">React</span>
+                                <div class="text-green-400 text-xs">Detected</div>
+                            </div>
+                            <div class="keyword-chip detected">
+                                <span class="font-medium">Python</span>
+                                <div class="text-green-400 text-xs">Detected</div>
+                            </div>
+                            <div class="keyword-chip missing">
+                                <span class="font-medium">AWS</span>
+                                <div class="text-red-400 text-xs">Missing</div>
+                            </div>
+                            <div class="keyword-chip missing">
+                                <span class="font-medium">Docker</span>
+                                <div class="text-red-400 text-xs">Missing</div>
+                            </div>
+                            <div class="keyword-chip partial">
+                                <span class="font-medium">TypeScript</span>
+                                <div class="text-yellow-400 text-xs">Partial</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                        <h3 class="text-2xl font-bold text-gray-400">It's a quick analysis, so it's not 100% accurate.</h3>
+                        <a href="{% url 'upload_resume' %}" class="btn-glow-primary">
+                            <i class="fas fa-arrow-right"></i> Get Detailed Analysis
+                        </a>
+                        <button id="download-report" class="btn-glow-secondary">
+                            <i class="fas fa-download"></i> Download Report
+                        </button>
+                        <button id="share-quick-results" class="btn-glow-secondary">
+                            <i class="fas fa-share-alt"></i> Share Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Analysis Results Section -->
+<section id="analysis-results" class="py-20 hidden">
+    <div class="container mx-auto px-4">
+        <div class="ultra-glass p-8 max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-shadow text-black">Resume Analysis Results</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Score Overview -->
+                <div class="glass-card p-6 hover:shadow-lg transition duration-300 bg-white/60">
+                    <h3 class="text-xl font-bold mb-4 text-center text-black">ATS Score</h3>
+                    <div class="relative mx-auto" style="width: 180px; height: 180px;">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path class="stroke-2 stroke-gray-300 fill-none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="home-ats-score-path" class="stroke-2 stroke-blue-600 fill-none" stroke-dasharray="0, 100" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="20" id="home-ats-score-text" class="text-4xl font-bold text-black" text-anchor="middle">0%</text>
+                        </svg>
+                    </div>
+                    <div class="mt-6">
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center text-sm mb-1 text-black font-medium">
+                                    <span>Format</span>
+                                    <span id="home-format-score" class="text-green-700 font-bold">0%</span>
+                                </div>
+                                <div class="w-full h-3 bg-gray-200 rounded-full">
+                                    <div id="home-format-progress" class="h-3 bg-green-600 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center text-sm mb-1 text-black font-medium">
+                                    <span>Content</span>
+                                    <span id="home-content-score" class="text-blue-700 font-bold">0%</span>
+                                </div>
+                                <div class="w-full h-3 bg-gray-200 rounded-full">
+                                    <div id="home-content-progress" class="h-3 bg-blue-600 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center text-sm mb-1 text-black font-medium">
+                                    <span>Keywords</span>
+                                    <span id="home-keywords-score" class="text-amber-700 font-bold">0%</span>
+                                </div>
+                                <div class="w-full h-3 bg-gray-200 rounded-full">
+                                    <div id="home-keywords-progress" class="h-3 bg-amber-500 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Summary -->
+                <div class="glass-card p-6 hover:shadow-lg transition duration-300 bg-white/60">
+                    <h3 class="text-xl font-bold mb-4 text-black">Resume Summary</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/80 p-4 rounded-lg border-l-4 border-green-600 shadow-md">
+                            <h4 class="font-semibold text-green-800 flex items-center gap-2 text-lg">
+                                <i class="fas fa-thumbs-up"></i> Strengths
+                            </h4>
+                            <ul class="mt-3 space-y-2 text-black" id="home-strengths-list">
+                                <!-- Will be populated by JavaScript -->
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white/80 p-4 rounded-lg border-l-4 border-amber-600 shadow-md">
+                            <h4 class="font-semibold text-amber-800 flex items-center gap-2 text-lg">
+                                <i class="fas fa-exclamation-circle"></i> Improvements
+                            </h4>
+                            <ul class="mt-3 space-y-2 text-black" id="home-improvements-list">
+                                <!-- Will be populated by JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Keywords Section -->
+            <div class="glass-card p-6 hover:shadow-lg transition duration-300 bg-white/60">
+                <h3 class="text-xl font-bold mb-6 text-black">Keyword Analysis</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="home-keywords-list">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Call-to-action -->
+            <div class="mt-10 text-center">
+                <p class="text-xl mb-6 text-black font-medium">Want a more detailed analysis and personalized recommendations?</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{% url 'upload_resume' %}" class="btn-glow-primary text-lg py-3 px-6">
+                        <i class="fas fa-search-plus"></i> Get Detailed Analysis
+                    </a>
+                    <button id="download-report" class="btn-glow-secondary">
+                        <i class="fas fa-download"></i> Download Report
+                    </button>
+                    <button id="share-quick-results" class="btn-glow-secondary">
+                        <i class="fas fa-share-alt"></i> Share Results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-shadow text-black">
+            Key Features
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="glass-card p-6 transform hover:scale-105 transition duration-300">
+                <div class="text-center mb-4">
+                    <i class="fas fa-robot text-4xl text-black mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-black">AI‑Powered Screening</h3>
+                    <p class="text-black">Automatically analyze and optimize your resume using advanced AI algorithms</p>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="glass-card p-6 transform hover:scale-105 transition duration-300">
+                <div class="text-center mb-4">
+                    <i class="fas fa-chart-line text-4xl text-black mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-black">ATS Compatibility</h3>
+                    <p class="text-black">Ensure your resume passes through Applicant Tracking Systems with ease</p>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="glass-card p-6 transform hover:scale-105 transition duration-300">
+                <div class="text-center mb-4">
+                    <i class="fas fa-cogs text-4xl text-black mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-black">Smart Recommendations</h3>
+                    <p class="text-black">Get personalized improvement suggestions to boost your chances</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-gradient-to-b from-transparent to-gray-900">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-shadow">How It Works</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Step 1 -->
+            <div class="glass-card p-6 text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center mx-auto mb-4">
+                    <span class="text-xl font-bold">1</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Upload Resume</h3>
+                <p class="text-gray-300">Upload your resume in any format (PDF, DOC, DOCX)</p>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="glass-card p-6 text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center mx-auto mb-4">
+                    <span class="text-xl font-bold">2</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">AI Analysis</h3>
+                <p class="text-gray-300">Our AI analyzes and extracts key information</p>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="glass-card p-6 text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center mx-auto mb-4">
+                    <span class="text-xl font-bold">3</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Get ATS Score</h3>
+                <p class="text-gray-300">See how well your resume performs with ATS systems</p>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="glass-card p-6 text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center mx-auto mb-4">
+                    <span class="text-xl font-bold">4</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Improve & Apply</h3>
+                <p class="text-gray-300">Follow recommendations and land your dream job</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Business Benefits Section -->
+<section class="py-20 bg-gradient-to-b from-gray-900 to-transparent">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-shadow text-white">For Businesses & Recruiters</h2>
+        <p class="text-xl text-center mb-16 text-white font-medium">Streamline your recruitment process with our powerful enterprise features</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+            <!-- Left side: Features -->
+            <div class="space-y-8">
+                <div class="glass-card p-6 hover:bg-white/15 transition duration-300 border border-white/30">
+                    <div class="flex items-start">
+                        <div class="bg-blue-500/30 p-3 rounded-full mr-4">
+                            <i class="fas fa-layer-group text-blue-300 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-white">Bulk Resume Screening</h3>
+                            <p class="text-white text-opacity-90">Process hundreds of resumes simultaneously with our advanced AI screening technology, saving hours of manual review.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover:bg-white/15 transition duration-300 border border-white/30">
+                    <div class="flex items-start">
+                        <div class="bg-green-500/30 p-3 rounded-full mr-4">
+                            <i class="fas fa-link text-green-300 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-white">Job Portal Integration</h3>
+                            <p class="text-white text-opacity-90">Connect your existing job portal or ATS with our API to automatically import and analyze applications.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover:bg-white/15 transition duration-300 border border-white/30">
+                    <div class="flex items-start">
+                        <div class="bg-purple-500/30 p-3 rounded-full mr-4">
+                            <i class="fas fa-chart-bar text-purple-300 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-white">Advanced Analytics</h3>
+                            <p class="text-white text-opacity-90">Gain valuable insights with detailed reporting on applicant qualifications, skills distribution, and more.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right side: CTA and image -->
+            <div class="flex flex-col items-center justify-center">
+                <div class="relative mb-10">
+                    <div class="animate-float">
+                        <img src="{% static 'images/business_recruitment.png' %}" alt="Business Recruitment" class="w-full max-w-md mx-auto rounded-lg shadow-xl" onerror="this.src='https://placehold.co/600x400?text=Business+Features'">
+                    </div>
+                    <div class="absolute top-4 right-4 bg-blue-600 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg">
+                        Enterprise Ready
+                    </div>
+                </div>
+                
+                <div class="ultra-glass p-8 text-center w-full max-w-md border border-white/30 backdrop-blur-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-white">Join as a Business Partner</h3>
+                    <p class="mb-6 text-white font-medium">Register your company to access premium features designed for recruiters and HR professionals.</p>
+                    {% if not request.user.business_profile %}
+                    <div class="flex justify-center">
+                        
+                            <a href="{% url 'business_signup' %}" class="btn btn-primary px-8 py-3 text-lg flex items-center gap-2 font-bold bg-blue-600 hover:bg-blue-700 shadow-lg">
+                                <i class="fas fa-briefcase"></i> Upgrade to Business
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-b from-gray-900 to-transparent">
+    <div class="container mx-auto px-4">
+        <div class="glass-card p-8 md:p-12 max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-shadow">Ready to Supercharge Your Job Search?</h2>
+            <p class="text-xl mb-8 text-gray-300">Join thousands of job seekers who've improved their resumes with our AI tool</p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+               
+               {% if request.user.business_profile %}
+                <a href="{% url 'business_dashboard' %}" class="btn btn-primary px-8 py-3 text-lg">Check Dashboard</a>
+               {% else %}
+                <a href="{% url 'business_signup' %}" class="btn btn-primary px-8 py-3 text-lg">Register as Business</a>
+               {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_css %}
+<style>
+    .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    #quick-check {
+        min-height: 90vh;
+        margin-top: 80px;
+        margin-bottom: 80px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .ultra-glass {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .ultra-glass:hover {
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .glass-card:hover {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .feature-badge {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition: all 0.3s ease;
+    }
+    
+    .feature-badge:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .upload-icon-container {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .upload-icon {
+        font-size: 30px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .upload-icon-container:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(59, 130, 246, 0.1);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(0.95); opacity: 0.5; }
+        70% { transform: scale(1.1); opacity: 0.25; }
+        100% { transform: scale(0.95); opacity: 0.5; }
+    }
+    
+    .glowing-btn {
+        background: linear-gradient(45deg, rgb(15,45,65), rgb(30,80,120));
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        z-index: 1;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .glowing-btn:before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
+        background-size: 400%;
+        z-index: -1;
+        border-radius: 12px;
+        animation: glowing 20s linear infinite;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    .glowing-btn:hover:before {
+        opacity: 1;
+    }
+    
+    @keyframes glowing {
+        0% { background-position: 0 0; }
+        50% { background-position: 400% 0; }
+        100% { background-position: 0 0; }
+    }
+    
+    .glowing-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .result-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+        border-radius: 12px;
+        padding: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .result-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .strengths-card {
+        border-left: 3px solid rgba(74, 222, 128, 0.5);
+    }
+    
+    .improvements-card {
+        border-left: 3px solid rgba(250, 204, 21, 0.5);
+    }
+    
+    .score-pill {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(5px);
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition: all 0.3s ease;
+    }
+    
+    .score-pill:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.12);
+    }
+    
+    .keyword-chip {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(5px);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+    
+    .keyword-chip:hover {
+        transform: translateY(-2px);
+    }
+    
+    .keyword-chip.detected {
+        border-left: 2px solid rgba(74, 222, 128, 0.5);
+    }
+    
+    .keyword-chip.missing {
+        border-left: 2px solid rgba(220, 38, 38, 0.5);
+    }
+    
+    .keyword-chip.partial {
+        border-left: 2px solid rgba(250, 204, 21, 0.5);
+    }
+    
+    .btn-glow-primary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: linear-gradient(45deg, rgb(15,45,65), rgb(30,80,120));
+        color: white;
+        font-weight: 500;
+        padding: 0.625rem 1.25rem;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        z-index: 1;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .btn-glow-primary:before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
+        background-size: 400%;
+        z-index: -1;
+        border-radius: 12px;
+        animation: glowing 20s linear infinite;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    .btn-glow-primary:hover:before {
+        opacity: 1;
+    }
+    
+    .btn-glow-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-glow-secondary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-weight: 500;
+        padding: 0.625rem 1.25rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-glow-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-primary {
+        background: rgb(12,36,52);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background: rgb(10,30,45);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-outline-light {
+        border: 2px solid rgb(12,36,52);
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-light:hover {
+        background: rgb(12,36,52);
+        transform: translateY(-2px);
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    .animate-float {
+        animation: float 4s ease-in-out infinite;
+    }
+    
+    .animate-fadeIn {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quick Resume Check Functionality
+        const quickResumeInput = document.getElementById('quick-resume');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const fileNameText = document.getElementById('file-name-text');
+        const quickCheckButton = document.getElementById('quick-check-button');
+        const quickCheckForm = document.getElementById('quick-check-form');
+        const quickResults = document.getElementById('quick-results');
+        
+        // Global variable to store analysis results for download
+        let quickAnalysisResults = null;
+        
+        // File input handling
+        quickResumeInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                fileNameText.textContent = file.name;
+                fileNameDisplay.classList.remove('hidden');
+                quickCheckButton.disabled = false;
+            } else {
+                fileNameDisplay.classList.add('hidden');
+                quickCheckButton.disabled = true;
+            }
+        });
+        
+        // Form submission
+        quickCheckForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            quickCheckButton.disabled = true;
+            quickCheckButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            
+            // Send the form data to the same API as the upload_resume page
+            const formData = new FormData(quickCheckForm);
+            
+            fetch('/resume/api/analyze-resume', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Store the analysis results for download
+                quickAnalysisResults = data;
+                
+                // Debug the response data
+                console.log('Raw response data:', data);
+                
+                // Display the results
+                displayQuickResults(data);
+                
+                // Show the results container
+                quickResults.classList.remove('hidden');
+                
+                // Scroll to results
+                quickResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error analyzing resume: ' + error.message);
+            })
+            .finally(() => {
+                // Reset button state
+                quickCheckButton.disabled = false;
+                quickCheckButton.innerHTML = '<i class="fas fa-robot"></i> Analyze Resume';
+            });
+        });
+        
+        // Function to display quick analysis results
+        function displayQuickResults(data) {
+            // Update ATS score
+            document.getElementById('quick-ats-score').textContent = `${data.ats_score}%`;
+            
+            // Update match score (job match score or content score)
+            const matchScore = data.job_match_score || data.analysis.content_score || 0;
+            document.getElementById('quick-match-score').textContent = `${matchScore}%`;
+            
+            // Update strengths
+            const quickSkillsList = document.getElementById('quick-skills-list');
+            quickSkillsList.innerHTML = '';
+            
+            if (data.analysis.strengths && data.analysis.strengths.length > 0) {
+                data.analysis.strengths.slice(0, 3).forEach(strength => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start';
+                    li.innerHTML = `
+                        <i class="fas fa-check text-green-400 mt-1 mr-2"></i>
+                        <span>${strength}</span>
+                    `;
+                    quickSkillsList.appendChild(li);
+                });
+            }
+            
+            // Update improvements
+            const quickMissingList = document.getElementById('quick-missing-list');
+            quickMissingList.innerHTML = '';
+            
+            if (data.analysis.improvements && data.analysis.improvements.length > 0) {
+                data.analysis.improvements.slice(0, 3).forEach(improvement => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start';
+                    li.innerHTML = `
+                        <i class="fas fa-times text-red-400 mt-1 mr-2"></i>
+                        <span>${improvement}</span>
+                    `;
+                    quickMissingList.appendChild(li);
+                });
+            }
+            
+            // Update keywords
+            const quickKeywordsList = document.getElementById('quick-keywords-list');
+            quickKeywordsList.innerHTML = '';
+            
+            if (data.analysis.keywords && data.analysis.keywords.length > 0) {
+                // Display up to 6 keywords
+                data.analysis.keywords.slice(0, 6).forEach(keyword => {
+                    const div = document.createElement('div');
+                    div.className = keyword.found ? 'keyword-chip detected' : 'keyword-chip missing';
+                    div.innerHTML = `
+                        <span class="font-medium">${keyword.name}</span>
+                        <div class="${keyword.found ? 'text-green-400' : 'text-red-400'} text-xs">
+                            ${keyword.found ? 'Detected' : 'Missing'}
+                        </div>
+                    `;
+                    quickKeywordsList.appendChild(div);
+                });
+            }
+        }
+        
+        // Download report button
+        document.getElementById('download-report').addEventListener('click', function() {
+            if (!quickAnalysisResults) {
+                alert('No analysis results available to download');
+                return;
+            }
+            
+            const report = `
+RESUME ANALYSIS REPORT
+=====================
+
+ATS SCORE: ${quickAnalysisResults.ats_score}%
+CONTENT SCORE: ${quickAnalysisResults.analysis.content_score}%
+KEYWORDS SCORE: ${quickAnalysisResults.analysis.keywords_score}%
+
+STRENGTHS
+---------
+${quickAnalysisResults.analysis.strengths.join('\n')}
+
+AREAS FOR IMPROVEMENT
+--------------------
+${quickAnalysisResults.analysis.improvements.join('\n')}
+
+KEYWORDS ANALYSIS
+----------------
+Found Keywords:
+${quickAnalysisResults.analysis.keywords.filter(k => k.found).map(k => k.name).join(', ')}
+
+Missing Keywords:
+${quickAnalysisResults.analysis.keywords.filter(k => !k.found).map(k => k.name).join(', ')}
+
+EXPERIENCE ANALYSIS
+------------------
+${quickAnalysisResults.analysis.experience.join('\n')}
+
+ADDITIONAL INSIGHTS
+------------------
+Job Match Score: ${quickAnalysisResults.job_match_score || 'N/A'}
+Resume Ranking: ${quickAnalysisResults.resume_ranking || 'N/A'}
+Confidence Score: ${quickAnalysisResults.confidence_score || 'N/A'}
+Predicted Role: ${quickAnalysisResults.predicted_role || 'N/A'}
+            `;
+            
+            // Create a Blob with the report text
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            // Create a temporary link and click it to download the file
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'quick_resume_analysis_report.txt';
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        });
+
+        // Share results button
+        document.getElementById('share-quick-results').addEventListener('click', function() {
+            if (!quickAnalysisResults) {
+                alert('No analysis results available to share');
+                return;
+            }
+            
+            // Create a simple message to share
+            const shareText = `Check out my resume analysis: ATS Score: ${quickAnalysisResults.ats_score}%, 
+                Match Score: ${quickAnalysisResults.job_match_score || quickAnalysisResults.analysis.content_score}%`;
+            
+            // Try to use Web Share API if available
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Resume Analysis Results',
+                    text: shareText,
+                    url: window.location.href,
+                })
+                .catch(error => {
+                    console.error('Error sharing:', error);
+                    // Fallback: copy to clipboard
+                    copyToClipboard(shareText);
+                });
+            } else {
+                // Fallback: copy to clipboard
+                copyToClipboard(shareText);
+            }
+        });
+        
+        // Helper function to copy text to clipboard
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Result copied to clipboard!');
+        }
+        
+        // Helper function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock %}

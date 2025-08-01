@@ -1,0 +1,13 @@
+
+Sophia Davis
+sophia.davis@example.com | +1-180-404-1515
+
+SKILLS
+Data Analysis, SQL, JavaScript, Python, Azure, Problem Solving, Machine Learning, Django
+
+EXPERIENCE
+5 years of experience as a Software Engineer at Google, developing scalable cloud solutions.
+
+EDUCATION
+Bachelor of Arts in Communication, Columbia University
+            

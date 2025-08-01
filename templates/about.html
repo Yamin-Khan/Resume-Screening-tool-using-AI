@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Page Title -->
+            <div class="glass-card p-5 mb-5 text-white">
+                <div class="text-center mb-4">
+                    <h1 class="display-4 fw-bold mb-3">About Our Resume Screening Tool</h1>
+                    <p class="lead">Revolutionizing recruitment through intelligent resume analysis</p>
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-md-6 mb-4">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                             alt="Team working together" class="img-fluid rounded-lg shadow-lg">
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="h3 mb-3">Our Mission</h2>
+                        <p>We're on a mission to transform the hiring process by leveraging the power of AI and machine learning to help companies find the perfect candidates efficiently and effectively.</p>
+                        <p>Our resume screening tool eliminates bias, saves time, and helps recruiters focus on what matters most - connecting with qualified candidates.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Our Story -->
+            <div class="glass-card p-5 mb-5 text-white">
+                <h2 class="h2 mb-4">Our Story</h2>
+                <p>Founded in 2023, Resume Screening Tool was born out of a simple observation: the traditional recruitment process was broken. HR professionals were spending countless hours manually reviewing resumes, often missing the best candidates due to unconscious biases or simple human error.</p>
+                <p>Our founders, experienced in both HR and artificial intelligence, saw an opportunity to create a solution that would revolutionize how companies hire talent. After months of development and testing with industry partners, we launched our platform with a commitment to making recruitment smarter, faster, and more equitable.</p>
+                <p>Today, we're proud to serve clients across industries, helping them build stronger teams and discover talent they might otherwise have overlooked.</p>
+            </div>
+            
+            <!-- Core Values -->
+            <div class="glass-card p-5 mb-5 text-white">
+                <h2 class="h2 mb-4">Our Core Values</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="mb-3 fs-1">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <h3 class="h4">Fairness</h3>
+                            <p>We're committed to creating technology that reduces bias in hiring and gives every qualified candidate a fair chance.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="mb-3 fs-1">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="h4">Innovation</h3>
+                            <p>We continuously improve our algorithms and features to stay at the cutting edge of recruitment technology.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="mb-3 fs-1">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3 class="h4">Privacy</h3>
+                            <p>We maintain the highest standards of data security and privacy for both employers and candidates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Meet Our Team -->
+            <div class="glass-card p-5 mb-5 text-white">
+                <h2 class="h2 mb-4 text-center">Meet Our Leadership Team</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="mb-3 fs-1">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3 class="h5">Yamin khan</h3>
+                            <p class="text-bold text-white">CEO & Co-founder</p>
+                            <p>Former HR Director with 15+ years of experience in talent acquisition.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="mb-3 fs-1">
+                                <i class="fas fa-user-astronaut"></i>
+                            </div>
+                            <h3 class="h5">Elon Musk</h3>
+                            <p class="text-bold text-white">CTO & Co-founder</p>
+                            <p>AI researcher with expertise in natural language processing and machine learning.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="mb-3 fs-1">
+                                <i class="fas fa-user-cog"></i>
+                            </div>
+                            <h3 class="h5">Robert Downey Jr.</h3>
+                            <p class="text-bold text-white">COO</p>
+                            <p>Operations expert who has scaled multiple tech startups to success.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="glass-card p-5 text-white text-center">
+                <h2 class="h2 mb-4">Ready to Transform Your Hiring Process?</h2>
+                <p class="lead mb-4">Join hundreds of companies that have streamlined their recruitment with our platform.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">Contact Us</a>
+                    {% if user.is_authenticated %}
+                        
+                    {% else %}
+                        <a href="{% url 'signup' %}" class="btn btn-outline-light btn-lg">Sign Up Today</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-primary {
+        background-color: rgb(12,36,52);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background-color: rgb(10,30,45);
+    }
+    
+    .btn-outline-light {
+        border: 2px solid rgb(12,36,52);
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-light:hover {
+        background-color: rgb(12,36,52);
+    }
+</style>
+{% endblock %} 

@@ -1,0 +1,15 @@
+
+Sophia Jackson
+sophia.jackson@example.com | +1-678-219-2989
+
+SKILLS
+Project Management, React, Data Analysis, C#, Machine Learning, Communication
+
+EXPERIENCE
+5 years of experience as a Software Engineer at Google, developing scalable cloud solutions.
+
+3 years of experience as a Data Scientist at Microsoft, building machine learning models.
+
+EDUCATION
+Bachelor of Arts in Communication, Columbia University
+            

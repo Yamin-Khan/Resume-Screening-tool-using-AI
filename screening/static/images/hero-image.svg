@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Circle -->
+    <circle cx="400" cy="300" r="250" fill="#EFF6FF" opacity="0.5"/>
+    
+    <!-- Document Stack -->
+    <g transform="translate(300, 200)">
+        <!-- Base Document -->
+        <rect x="0" y="0" width="200" height="250" rx="10" fill="white" stroke="#2563EB" stroke-width="2"/>
+        <rect x="20" y="20" width="160" height="20" rx="5" fill="#EFF6FF"/>
+        <rect x="20" y="60" width="120" height="10" rx="5" fill="#EFF6FF"/>
+        <rect x="20" y="80" width="140" height="10" rx="5" fill="#EFF6FF"/>
+        <rect x="20" y="100" width="100" height="10" rx="5" fill="#EFF6FF"/>
+        
+        <!-- Second Document (slightly offset) -->
+        <rect x="10" y="10" width="200" height="250" rx="10" fill="white" stroke="#2563EB" stroke-width="2" opacity="0.8"/>
+        <rect x="30" y="30" width="160" height="20" rx="5" fill="#EFF6FF"/>
+        <rect x="30" y="70" width="120" height="10" rx="5" fill="#EFF6FF"/>
+        <rect x="30" y="90" width="140" height="10" rx="5" fill="#EFF6FF"/>
+        <rect x="30" y="110" width="100" height="10" rx="5" fill="#EFF6FF"/>
+        
+        <!-- Third Document (more offset) -->
+        <rect x="20" y="20" width="200" height="250" rx="10" fill="white" stroke="#2563EB" stroke-width="2" opacity="0.6"/>
+        <rect x="40" y="40" width="160" height="20" rx="5" fill="#EFF6FF"/>
+        <rect x="40" y="80" width="120" height="10" rx="5" fill="#EFF6FF"/>
+        <rect x="40" y="100" width="140" height="10" rx="5" fill="#EFF6FF"/>
+        <rect x="40" y="120" width="100" height="10" rx="5" fill="#EFF6FF"/>
+    </g>
+    
+    <!-- Magnifying Glass -->
+    <g transform="translate(450, 150)">
+        <circle cx="0" cy="0" r="50" fill="white" stroke="#2563EB" stroke-width="3"/>
+        <line x1="35" y1="35" x2="70" y2="70" stroke="#2563EB" stroke-width="3"/>
+    </g>
+    
+    <!-- Checkmark -->
+    <g transform="translate(500, 400)">
+        <circle cx="0" cy="0" r="30" fill="#10B981" opacity="0.2"/>
+        <path d="M-15 0 L0 15 L30 -15" stroke="#10B981" stroke-width="4" fill="none"/>
+    </g>
+    
+    <!-- Graph Elements -->
+    <g transform="translate(200, 400)">
+        <!-- Bar Graph -->
+        <rect x="0" y="0" width="20" height="100" fill="#2563EB" opacity="0.7"/>
+        <rect x="30" y="20" width="20" height="80" fill="#2563EB" opacity="0.7"/>
+        <rect x="60" y="40" width="20" height="60" fill="#2563EB" opacity="0.7"/>
+        <rect x="90" y="60" width="20" height="40" fill="#2563EB" opacity="0.7"/>
+    </g>
+</svg> 

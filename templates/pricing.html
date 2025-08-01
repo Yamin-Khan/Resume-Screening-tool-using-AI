@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pricing | Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="container mx-auto px-4">
+        <!-- Pricing Header -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Choose the Right Plan for You</h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                Whether you're an individual or a business, we have a plan that fits your needs.
+                Start with our free tier and upgrade when you're ready.
+            </p>
+        </div>
+
+        <!-- Pricing Toggle -->
+        <div class="flex justify-center mb-10">
+            <div class="glass-card p-1 rounded-full inline-flex">
+                <button id="monthly-btn" class="px-6 py-2 rounded-full bg-blue-600 text-white font-medium">Monthly</button>
+                <button id="yearly-btn" class="px-6 py-2 rounded-full text-gray-300 font-medium">Yearly (20% off)</button>
+            </div>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Free Plan -->
+            <div class="glass-card rounded-2xl overflow-hidden shadow-xl transition-transform duration-300 hover:-translate-y-2">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-white mb-4">Free</h3>
+                    <div class="flex items-baseline mb-6">
+                        <span class="text-5xl font-extrabold text-white">$0</span>
+                        <span class="text-xl text-gray-400 ml-2">/month</span>
+                    </div>
+                    <p class="text-gray-300 mb-8">Perfect for individuals just getting started.</p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">25 Resume Screenings</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Basic Analysis</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Resume Storage</span>
+                        </li>
+                        <li class="flex items-center text-gray-500">
+                            <svg class="w-5 h-5 text-gray-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Advanced Analytics</span>
+                        </li>
+                        <li class="flex items-center text-gray-500">
+                            <svg class="w-5 h-5 text-gray-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Priority Support</span>
+                        </li>
+                    </ul>
+                    
+                    {% if user.is_authenticated %}
+                    {% if user_profile and user_profile.subscription_plan == 'free' or business_profile and business_profile.subscription_plan == 'free' %}
+                    <div class="block w-full py-3 px-6 text-center rounded-lg glass-footer text-white font-medium">
+                        Current Plan
+                    </div>
+                    {% else %}
+                    <a href="{% url 'upgrade_plan' %}?plan=free" 
+                       class="block w-full py-3 px-6 text-center rounded-lg glass-footer hover:bg-opacity-80 text-white font-medium transition duration-200">
+                       Downgrade to Free
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'signup' %}" 
+                       class="block w-full py-3 px-6 text-center rounded-lg glass-footer hover:bg-opacity-80 text-white font-medium transition duration-200">
+                       Get Started
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Basic Plan -->
+            <div class="glass-card rounded-2xl overflow-hidden shadow-xl transform scale-105 z-10 transition-transform duration-300 hover:-translate-y-2 border-2 border-blue-500">
+                <div class="bg-blue-600 py-2">
+                    <p class="text-center text-white font-medium">MOST POPULAR</p>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-white mb-4">Standard</h3>
+                    <div class="flex items-baseline mb-6">
+                        <span class="text-5xl font-extrabold text-white" id="standard-price">$19</span>
+                        <span class="text-xl text-gray-400 ml-2" id="standard-period">/month</span>
+                    </div>
+                    <p class="text-gray-300 mb-8">Perfect for individuals and small businesses.</p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">100 Resume Screenings</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Advanced Analysis</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Resume Storage</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Basic Analytics</span>
+                        </li>
+                        <li class="flex items-center text-gray-500">
+                            <svg class="w-5 h-5 text-gray-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Priority Support</span>
+                        </li>
+                    </ul>
+                    
+                    {% if user.is_authenticated %}
+                    {% if user_profile and user_profile.subscription_plan == 'standard' or business_profile and business_profile.subscription_plan == 'standard' %}
+                    <div class="block w-full py-3 px-6 text-center rounded-lg bg-blue-600 text-white font-medium">
+                        Current Plan
+                    </div>
+                    {% else %}
+                    <a href="{% url 'upgrade_plan' %}?plan=standard" 
+                       class="block w-full py-3 px-6 text-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition duration-200">
+                       Upgrade Now
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'signup' %}" 
+                       class="block w-full py-3 px-6 text-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition duration-200">
+                       Sign Up & Subscribe
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Premium Plan -->
+            <div class="glass-card rounded-2xl overflow-hidden shadow-xl transition-transform duration-300 hover:-translate-y-2">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-white mb-4">Premium</h3>
+                    <div class="flex items-baseline mb-6">
+                        <span class="text-5xl font-extrabold text-white" id="premium-price">$49</span>
+                        <span class="text-xl text-gray-400 ml-2" id="premium-period">/month</span>
+                    </div>
+                    <p class="text-gray-300 mb-8">For businesses with advanced needs.</p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Unlimited Resume Screenings</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Premium Analysis</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Unlimited Storage</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Advanced Analytics</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-300">Priority Support</span>
+                        </li>
+                    </ul>
+                    
+                    {% if user.is_authenticated %}
+                    {% if user_profile and user_profile.subscription_plan == 'premium' or business_profile and business_profile.subscription_plan == 'premium' %}
+                    <div class="block w-full py-3 px-6 text-center rounded-lg glass-footer text-white font-medium">
+                        Current Plan
+                    </div>
+                    {% else %}
+                    <a href="{% url 'upgrade_plan' %}?plan=premium" 
+                       class="block w-full py-3 px-6 text-center rounded-lg glass-footer hover:bg-opacity-80 text-white font-medium transition duration-200">
+                       Upgrade Now
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'signup' %}" 
+                       class="block w-full py-3 px-6 text-center rounded-lg glass-footer hover:bg-opacity-80 text-white font-medium transition duration-200">
+                       Sign Up & Subscribe
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- FAQ Section -->
+        <div class="mt-20 max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-white text-center mb-10">Frequently Asked Questions</h2>
+            
+            <div class="space-y-6">
+                <div class="glass-card rounded-xl p-6">
+                    <button class="flex justify-between items-center w-full text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-semibold text-white">What happens when I reach my resume limit?</h3>
+                        <svg class="w-6 h-6 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="mt-4 hidden">
+                        <p class="text-gray-300">
+                            Once you reach your plan's resume screening limit, you'll need to upgrade to a higher tier to continue screening resumes.
+                            Your previously screened resumes will remain accessible in your account.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-xl p-6">
+                    <button class="flex justify-between items-center w-full text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-semibold text-white">Can I switch between plans?</h3>
+                        <svg class="w-6 h-6 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="mt-4 hidden">
+                        <p class="text-gray-300">
+                            Yes, you can upgrade or downgrade your plan at any time. When upgrading, the change takes effect immediately.
+                            When downgrading, the change will take effect at the end of your current billing cycle.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-xl p-6">
+                    <button class="flex justify-between items-center w-full text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-semibold text-white">Is there a difference between individual and business accounts?</h3>
+                        <svg class="w-6 h-6 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="mt-4 hidden">
+                        <p class="text-gray-300">
+                            The core functionality is the same for both individual and business users. The main difference is in how you manage your account and users.
+                            Business accounts have additional features for team management and collaboration.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-xl p-6">
+                    <button class="flex justify-between items-center w-full text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-semibold text-white">Do you offer custom enterprise plans?</h3>
+                        <svg class="w-6 h-6 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="mt-4 hidden">
+                        <p class="text-gray-300">
+                            Yes, for large organizations with specific needs, we offer custom enterprise plans.
+                            Please contact our sales team at <a href="mailto:sales@example.com" class="text-blue-400 hover:underline">sales@example.com</a> to discuss your requirements.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle FAQ panels
+    function toggleFAQ(button) {
+        const panel = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        
+        if (panel.classList.contains('hidden')) {
+            panel.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+        } else {
+            panel.classList.add('hidden');
+            icon.classList.remove('rotate-180');
+        }
+    }
+    
+    // Switch between monthly and yearly pricing
+    document.getElementById('monthly-btn').addEventListener('click', function() {
+        this.classList.add('bg-blue-600', 'text-white');
+        this.classList.remove('text-gray-300');
+        document.getElementById('yearly-btn').classList.remove('bg-blue-600', 'text-white');
+        document.getElementById('yearly-btn').classList.add('text-gray-300');
+        
+        document.getElementById('standard-price').textContent = '$19';
+        document.getElementById('premium-price').textContent = '$49';
+        document.getElementById('standard-period').textContent = '/month';
+        document.getElementById('premium-period').textContent = '/month';
+    });
+    
+    document.getElementById('yearly-btn').addEventListener('click', function() {
+        this.classList.add('bg-blue-600', 'text-white');
+        this.classList.remove('text-gray-300');
+        document.getElementById('monthly-btn').classList.remove('bg-blue-600', 'text-white');
+        document.getElementById('monthly-btn').classList.add('text-gray-300');
+        
+        document.getElementById('standard-price').textContent = '$182';
+        document.getElementById('premium-price').textContent = '$470';
+        document.getElementById('standard-period').textContent = '/year';
+        document.getElementById('premium-period').textContent = '/year';
+    });
+</script>
+{% endblock %} 

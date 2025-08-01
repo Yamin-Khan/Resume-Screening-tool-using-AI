@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Features - Resume Screening Tool{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced text visibility styles */
+    .feature-title {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+    
+    .feature-text {
+        color: #ffffff;
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+    
+    .feature-item {
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+    
+    .feature-card {
+        background-color: rgba(10, 20, 30, 0.7) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        background-color: rgba(20, 40, 60, 0.8) !important;
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .step-card {
+        background-color: rgba(10, 20, 30, 0.7) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    
+    .hero-subtitle {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+    
+    .cta-section {
+        background-color: rgba(20, 40, 60, 0.8) !important;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+    
+    .cta-text {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+        font-weight: 500;
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    
+    .feature-icon-container {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .section-heading {
+        text-shadow: 0 4px 8px rgba(0,0,0,0.7);
+        font-weight: 800;
+    }
+    
+    .action-button {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .action-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="min-h-[40vh] flex items-center justify-center relative overflow-hidden">
+    <div class="absolute -z-10 w-full h-full">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('{% static 'images/particles.svg' %}')] bg-repeat opacity-20"></div>
+    </div>
+    
+    <div class="container mx-auto px-4">
+        <div class="glass-card p-8 md:p-12 max-w-5xl mx-auto" style="background-color: rgba(10, 20, 30, 0.7); border: 2px solid rgba(255, 255, 255, 0.2);">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 text-shadow text-white section-heading">Our <span class="text-blue-400">Features</span></h1>
+                <p class="text-xl md:text-2xl mb-8 text-white hero-subtitle">Discover how our AI-powered resume screening tools can transform your job search</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Features Section -->
+<section class="py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: AI Resume Analysis -->
+                <div class="glass-card p-8 rounded-xl feature-card transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 rounded-full bg-blue-600/40 flex items-center justify-center mx-auto mb-4 feature-icon-container">
+                            <i class="fas fa-robot text-blue-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">AI Resume Analysis</h3>
+                    </div>
+                    <p class="text-center feature-text mb-5">Our advanced AI algorithms analyze your resume against job descriptions to provide tailored recommendations and improvements.</p>
+                    <ul class="mt-4 space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">ATS compatibility scoring</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Keyword optimization</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Content and formatting analysis</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 2: Smart Matching -->
+                <div class="glass-card p-8 rounded-xl feature-card transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 rounded-full bg-purple-600/40 flex items-center justify-center mx-auto mb-4 feature-icon-container">
+                            <i class="fas fa-puzzle-piece text-purple-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">Smart Matching</h3>
+                    </div>
+                    <p class="text-center feature-text mb-5">Match your resume to specific job descriptions to see how well you qualify and what skills need improvement.</p>
+                    <ul class="mt-4 space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Job-specific match scoring</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Missing skill identification</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Personalized improvement suggestions</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 3: Analytics Dashboard -->
+                <div class="glass-card p-8 rounded-xl feature-card transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 rounded-full bg-green-600/40 flex items-center justify-center mx-auto mb-4 feature-icon-container">
+                            <i class="fas fa-chart-line text-green-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">Analytics Dashboard</h3>
+                    </div>
+                    <p class="text-center feature-text mb-5">Track your resume performance over time with detailed analytics and insights.</p>
+                    <ul class="mt-4 space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Historical performance tracking</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Progress visualization</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Skill growth metrics</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 4: Custom Resume Builder -->
+                <div class="glass-card p-8 rounded-xl feature-card transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 rounded-full bg-yellow-600/40 flex items-center justify-center mx-auto mb-4 feature-icon-container">
+                            <i class="fas fa-file-alt text-yellow-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">Custom Resume Builder</h3>
+                    </div>
+                    <p class="text-center feature-text mb-5">Create tailored versions of your resume for different job applications, optimized for specific positions.</p>
+                    <ul class="mt-4 space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Multiple resume versions</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Job-specific optimization</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Export in multiple formats</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 5: AI Feedback -->
+                <div class="glass-card p-8 rounded-xl feature-card transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 rounded-full bg-red-600/40 flex items-center justify-center mx-auto mb-4 feature-icon-container">
+                            <i class="fas fa-comments text-red-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">AI Feedback</h3>
+                    </div>
+                    <p class="text-center feature-text mb-5">Receive detailed feedback and suggestions from our AI to improve your resume's effectiveness.</p>
+                    <ul class="mt-4 space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Section-by-section analysis</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Wording and phrasing improvements</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Action verb recommendations</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 6: Career Insights -->
+                <div class="glass-card p-8 rounded-xl feature-card transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 rounded-full bg-teal-600/40 flex items-center justify-center mx-auto mb-4 feature-icon-container">
+                            <i class="fas fa-lightbulb text-teal-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">Career Insights</h3>
+                    </div>
+                    <p class="text-center feature-text mb-5">Get valuable insights into industry trends and in-demand skills for your chosen career path.</p>
+                    <ul class="mt-4 space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Industry trend analysis</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Skill gap identification</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3 text-lg"></i>
+                            <span class="text-white feature-item">Career path recommendations</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-16" style="background-color: rgba(10, 20, 30, 0.5);">
+    <div class="container mx-auto px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white mb-6 text-shadow section-heading">How It Works</h2>
+                <p class="text-xl text-white max-w-3xl mx-auto hero-subtitle">Our simple 3-step process makes optimizing your resume easier than ever</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="glass-card p-8 rounded-xl relative step-card">
+                    <div class="absolute -top-6 -left-6 w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">1</div>
+                    <div class="text-center mb-4 pt-4">
+                        <div class="w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-upload text-blue-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">Upload</h3>
+                    </div>
+                    <p class="text-center text-white feature-text">Upload your current resume in PDF, DOCX, or TXT format. Optionally add a job description to get more targeted insights.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="glass-card p-8 rounded-xl relative step-card">
+                    <div class="absolute -top-6 -left-6 w-14 h-14 rounded-full bg-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">2</div>
+                    <div class="text-center mb-4 pt-4">
+                        <div class="w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-cogs text-purple-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">Analyze</h3>
+                    </div>
+                    <p class="text-center text-white feature-text">Our AI will analyze your resume for ATS compatibility, keyword optimization, formatting, and content quality.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="glass-card p-8 rounded-xl relative step-card">
+                    <div class="absolute -top-6 -left-6 w-14 h-14 rounded-full bg-green-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">3</div>
+                    <div class="text-center mb-4 pt-4">
+                        <div class="w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-check-circle text-green-400 feature-icon"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4 feature-title">Improve</h3>
+                    </div>
+                    <p class="text-center text-white feature-text">Get personalized suggestions to improve your resume, highlight your strengths, and address any weaknesses.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-card p-8 md:p-12 rounded-xl text-center cta-section">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-shadow section-heading">Ready to Optimize Your Resume?</h2>
+                <p class="text-xl text-white mb-8 cta-text">Try our AI-powered resume screening tools today and land your dream job faster.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{% url 'upload_resume' %}" class="btn-glow-primary text-lg px-8 py-4 font-bold action-button">
+                        <i class="fas fa-file-upload mr-2"></i> Upload Your Resume
+                    </a>
+                    <a href="{% url 'pricing' %}" class="btn-glow-secondary text-lg px-8 py-4 font-bold action-button">
+                        <i class="fas fa-tag mr-2"></i> View Pricing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

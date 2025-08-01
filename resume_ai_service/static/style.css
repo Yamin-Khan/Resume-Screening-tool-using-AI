@@ -1,0 +1,466 @@
+/* Global styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Navbar (Header) */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #001f3f;
+    color: white;
+    padding: 20px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #005fa3;
+}
+
+.navbar .logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #f0f4f8;
+}
+
+.navbar nav a {
+    margin-left: 20px;
+    color: #f0f4f8;
+    font-weight: 500;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.navbar nav a:hover {
+    color: #00bfff;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px;
+    background: #001f3f;
+    color: white;
+    margin-top: 50px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+}
+
+footer {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Hero Section */
+.hero-home {
+    position: relative;
+    height: 100vh;
+    background-image: url("ai-generated-8627457_1280.png"); /* Add or update the image path here */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Hero Content Styling */
+.hero-content-home {
+    z-index: 1;
+    max-width: 700px;
+    text-align: center;
+    padding: 20px;
+    animation: slideInFromBottom 1.5s ease-out;
+}
+
+/* Title Styling */
+.hero-content-home h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    animation: fadeInUp 1.5s ease-out;
+}
+
+/* Paragraph Styling */
+.hero-content-home p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInUp 2s ease-out 0.5s forwards;
+}
+
+/* Button Styling */
+.hero-content-home .btn {
+    background-color: #0d6efd;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    transform: translateY(10px);
+    opacity: 0;
+    animation: fadeInUp 2s ease-out 1s forwards;
+}
+
+.hero-content-home .btn:hover {
+    background-color: #0b5ed7;
+    transform: translateY(0px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* Hero Section */
+.hero {
+    position: relative;
+    height: 90vh;
+    text-align: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 0;
+}
+
+.hero-content {
+    z-index: 1;
+    max-width: 700px;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.hero-content .btn {
+    background: #0d6efd;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 0 10px;
+    display: inline-block;
+}
+
+/* Upload Form */
+.upload-form {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 12px 20px;
+    border: 2px dashed #0d6efd;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.custom-file-upload input {
+    display: none;
+}
+
+.upload-form button {
+    background-color: #198754;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.upload-form button:hover {
+    background-color: #157347;
+}
+
+/* Result Section */
+.result, .error {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+.result .highlight {
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+/* Chatbot */
+.chatbot-container {
+    background: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.chatbox {
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.chat-message {
+    margin: 10px 0;
+}
+
+.chat-message.bot {
+    background: #e9ecef;
+    padding: 10px;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.chat-message.user {
+    text-align: right;
+    color: #0d6efd;
+}
+
+.chat-form {
+    display: flex;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.chat-form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.chat-form button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-form button:hover {
+    background-color: #0b5ed7;
+}
+
+.contact {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.contact-header h2 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.contact-header p {
+    color: #555;
+    font-size: 1.1em;
+}
+
+.contact-info {
+    margin-bottom: 40px;
+}
+
+.contact-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.contact-info li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+.contact-info li i {
+    font-size: 1.5em;
+    color: #2c3e50;
+    margin-right: 15px;
+}
+
+.contact-info li span {
+    font-weight: bold;
+}
+
+.contact-info a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.contact-form {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form h3 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.contact-form button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contact-form button:hover {
+    background-color: #2980b9;
+}
+.success-message {
+    background-color: #28a745;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.success-message .btn {
+    background-color: #155724;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.success-message .btn:hover {
+    background-color: #1e7e34;
+}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Profile Header -->
+        <div class="glass-card p-8 rounded-2xl shadow-xl mb-8">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="w-32 h-32 rounded-full bg-gray-200 bg-opacity-20 flex items-center justify-center">
+                    <span class="text-4xl text-white">{{ user.username|first|upper }}</span>
+                </div>
+                <div class="text-center md:text-left">
+                    <h1 class="text-3xl font-bold text-white">{{ user.username }}</h1>
+                    <p class="text-lg text-white text-opacity-80">{{ user.email }}</p>
+                    <div class="mt-4">
+                        <a href="{% url 'profile_update' %}" class="bg-[rgb(12,36,52)] text-white px-6 py-2 rounded-full hover:bg-[rgb(10,30,45)] transition font-semibold">
+                            Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-2xl shadow-xl text-center">
+                <h3 class="text-xl font-semibold text-white mb-2">Resumes Screened</h3>
+                <p class="text-3xl font-bold text-blue-400">{{ resume_count }}</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl shadow-xl text-center">
+                <h3 class="text-xl font-semibold text-white mb-2">Saved Candidates</h3>
+                <p class="text-3xl font-bold text-green-400">0</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl shadow-xl text-center">
+                <h3 class="text-xl font-semibold text-white mb-2">Reviews</h3>
+                <p class="text-3xl font-bold text-yellow-400">0</p>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="glass-card p-8 rounded-2xl shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6">Recent Activity</h2>
+            <div class="space-y-4">
+                {% if recent_analyses %}
+                    {% for analysis in recent_analyses %}
+                        <div class="border-b border-white border-opacity-20 pb-4 hover-highlight rounded-lg p-3">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-white font-medium">{{ analysis.file_name }}</p>
+                                    <p class="text-white text-opacity-70 text-sm">
+                                        {% if analysis.job_title %}For: {{ analysis.job_title }}{% endif %}
+                                        {% if analysis.industry %} | {{ analysis.industry }}{% endif %}
+                                    </p>
+                                    <p class="text-white text-opacity-60 text-xs mt-1">{{ analysis.created_at|date:"F j, Y, g:i a" }}</p>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-lg font-bold {% if analysis.ats_score >= 80 %}text-green-400{% elif analysis.ats_score >= 60 %}text-yellow-400{% else %}text-red-400{% endif %}">
+                                        {{ analysis.ats_score }}%
+                                    </span>
+                                    <span class="text-white text-opacity-60 text-xs">ATS Score</span>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <a href="{% url 'resume_detail' analysis.id %}" class="text-blue-400 text-sm hover:text-blue-300 transition">
+                                    View Analysis →
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="border-b border-white border-opacity-20 pb-4">
+                        <p class="text-white text-opacity-80">No recent activity</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hover-highlight:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    .text-gray-300 {
+        color: rgba(255, 255, 255, 0.7);
+    }
+</style>
+{% endblock %} 

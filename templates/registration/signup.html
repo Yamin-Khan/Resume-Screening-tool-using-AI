@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if is_business_signup %}Business Registration{% else %}Sign Up{% endif %} - Resume Screening Tool{% endblock %}
+
+{% block extra_css %}
+<style>
+    .account-type-container {
+        margin-bottom: 2rem;
+    }
+    
+    .account-type-options {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .account-type-option {
+        flex: 1;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .account-type-option:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .account-type-option.selected {
+        background-color: rgba(79, 70, 229, 0.2);
+        border-color: rgba(79, 70, 229, 0.6);
+    }
+    
+    .account-form {
+        display: none;
+    }
+    
+    .account-form.active {
+        display: block;
+    }
+    
+    .business-fields {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div class="max-w-md w-full">
+        <div class="glass-card p-8 rounded-xl">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-white">
+                    {% if is_business_signup %}
+                    Register Your Business
+                    {% else %}
+                    Create Your Account
+                    {% endif %}
+                </h2>
+                <p class="text-gray-300 mt-2">
+                    {% if is_business_signup %}
+                    Join our platform to access premium business features for resume screening
+                    {% else %}
+                    Join our platform to get started with your resume screening journey
+                    {% endif %}
+                </p>
+            </div>
+            
+            {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                <div class="bg-red-500 bg-opacity-20 text-white p-4 rounded-lg">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if not is_business_signup %}
+            <div class="account-type-container">
+                <h3 class="text-xl font-bold text-white mb-2">Select Account Type</h3>
+                <p class="text-gray-300 mb-4">Choose the type of account you want to create</p>
+                
+                <div class="account-type-options">
+                    <div class="account-type-option selected" data-type="individual">
+                        <h4 class="text-lg font-bold text-white mb-2">Individual</h4>
+                        <p class="text-gray-300 text-sm">For job seekers looking to improve their resumes</p>
+                    </div>
+                    <div class="account-type-option" data-type="business">
+                        <h4 class="text-lg font-bold text-white mb-2">Business</h4>
+                        <p class="text-gray-300 text-sm">For companies looking to screen multiple resumes</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="mb-6">
+                <div class="bg-blue-500 bg-opacity-20 text-white p-4 rounded-lg">
+                    <h3 class="text-lg font-bold mb-2">Business Account Registration</h3>
+                    <p>You're creating a business account which includes premium features like:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>Bulk resume screening</li>
+                        <li>Job portal integration</li>
+                        <li>Advanced analytics and reporting</li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            
+            <form method="post" id="individualForm" class="account-form active">
+                {% csrf_token %}
+                <input type="hidden" name="user_type" value="individual">
+                
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                    <input type="text" name="username" id="username" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                    <input type="email" name="email" id="email" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                    <input type="password" name="password" id="password" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <div class="mb-6">
+                    <label for="confirm_password" class="block text-sm font-medium text-gray-300 mb-1">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                    Create Account
+                </button>
+            </form>
+            
+            <form method="post" id="businessForm" class="account-form">
+                {% csrf_token %}
+                <input type="hidden" name="user_type" value="business">
+                
+                <div class="mb-4">
+                    <label for="business_username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                    <input type="text" name="username" id="business_username" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="business_email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                    <input type="email" name="email" id="business_email" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="business_password1" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                    <input type="password" name="password1" id="business_password1" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <div class="mb-6">
+                    <label for="business_password2" class="block text-sm font-medium text-gray-300 mb-1">Confirm Password</label>
+                    <input type="password" name="password2" id="business_password2" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                </div>
+                
+                <div class="business-fields">
+                    <h3 class="text-xl font-bold text-white mb-4">Business Information</h3>
+                    
+                    <div class="mb-4">
+                        <label for="company_name" class="block text-sm font-medium text-gray-300 mb-1">Company Name</label>
+                        <input type="text" name="company_name" id="company_name" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="industry" class="block text-sm font-medium text-gray-300 mb-1">Industry</label>
+                        <input type="text" name="industry" id="industry" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="company_size" class="block text-sm font-medium text-gray-300 mb-1">Company Size</label>
+                        <select name="company_size" id="company_size" required class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                            <option value="small">1-50 employees</option>
+                            <option value="medium">51-200 employees</option>
+                            <option value="large">201-1000 employees</option>
+                            <option value="enterprise">1000+ employees</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="company_website" class="block text-sm font-medium text-gray-300 mb-1">Company Website (Optional)</label>
+                        <input type="url" name="company_website" id="company_website" class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="company_address" class="block text-sm font-medium text-gray-300 mb-1">Company Address (Optional)</label>
+                        <textarea name="company_address" id="company_address" rows="3" class="w-full bg-white bg-opacity-10 border border-gray-600 rounded-lg px-4 py-2 text-white"></textarea>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                    Create Business Account
+                </button>
+            </form>
+            
+            <div class="text-center mt-6">
+                <p class="text-gray-300">
+                    Already have an account? <a href="{% url 'login' %}" class="text-indigo-400 hover:text-indigo-300">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const accountTypeOptions = document.querySelectorAll('.account-type-option');
+        const individualForm = document.getElementById('individualForm');
+        const businessForm = document.getElementById('businessForm');
+        
+        // Auto-select business form if coming from business signup URL
+        {% if is_business_signup %}
+        // Select business option
+        accountTypeOptions.forEach(opt => {
+            if (opt.getAttribute('data-type') === 'business') {
+                opt.classList.add('selected');
+            } else {
+                opt.classList.remove('selected');
+            }
+        });
+        
+        // Show business form
+        individualForm.classList.remove('active');
+        businessForm.classList.add('active');
+        {% endif %}
+        
+        accountTypeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                accountTypeOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Show the appropriate form based on selection
+                const accountType = this.getAttribute('data-type');
+                if (accountType === 'individual') {
+                    individualForm.classList.add('active');
+                    businessForm.classList.remove('active');
+                } else {
+                    individualForm.classList.remove('active');
+                    businessForm.classList.add('active');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %} 

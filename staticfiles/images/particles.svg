@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <!-- a repeating 10×10 dot pattern -->
+    <pattern id="dots" patternUnits="userSpaceOnUse" width="10" height="10">
+      <circle cx="1" cy="1" r="1" fill="white"/>
+    </pattern>
+  </defs>
+  <!-- fill the entire viewport with the dot pattern at low opacity -->
+  <rect width="40" height="40" fill="url(#dots)" opacity="0.2"/>
+</svg>

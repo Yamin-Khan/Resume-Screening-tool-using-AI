@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upgrade Plan | Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto glass-card rounded-2xl overflow-hidden shadow-2xl">
+            <div class="bg-blue-600 py-3 px-6">
+                <h1 class="text-2xl font-bold text-white">Confirm Your Subscription</h1>
+            </div>
+            
+            <div class="p-8">
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-white mb-4">You're updating to the {{ plan }} Plan</h2>
+                    
+                    <div class="flex items-center mb-6 glass-card p-4 rounded-lg">
+                        <div class="mr-4">
+                            <svg class="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-lg font-medium text-white">{{ price }}</p>
+                            <p class="text-gray-300">{{ resume_limit }} Resume Screenings</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card bg-opacity-30 rounded-lg p-5 mb-6">
+                        <h3 class="text-lg font-medium text-white mb-2">What You'll Get:</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-400 mr-2 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>{{ resume_limit }} Resume Screenings per month</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-400 mr-2 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Advanced Analytics Dashboard</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-400 mr-2 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Detailed Resume Feedback</span>
+                            </li>
+                            {% if plan == 'Premium' %}
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-400 mr-2 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Priority Support</span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    
+                    {% if plan != 'Free' %}
+                    <p class="text-gray-300 mb-6">
+                        Your subscription will renew automatically. You can cancel at any time from your account settings.
+                    </p>
+                    {% endif %}
+                </div>
+                
+                <form method="POST" class="mb-4">
+                    {% csrf_token %}
+                    
+                    {% if plan != 'Free' %}
+                    <div class="mb-6">
+                        <label for="card-number" class="block text-gray-300 mb-2">Card Number</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" class="w-full px-4 py-2 glass-card bg-opacity-30 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="expiry" class="block text-gray-300 mb-2">Expiry Date</label>
+                            <input type="text" id="expiry" placeholder="MM/YY" class="w-full px-4 py-2 glass-card bg-opacity-30 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="cvc" class="block text-gray-300 mb-2">CVC</label>
+                            <input type="text" id="cvc" placeholder="123" class="w-full px-4 py-2 glass-card bg-opacity-30 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="name" class="block text-gray-300 mb-2">Name on Card</label>
+                        <input type="text" id="name" placeholder="John Doe" class="w-full px-4 py-2 glass-card bg-opacity-30 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="mb-8">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="terms" class="mr-2">
+                            <label for="terms" class="text-gray-300">I agree to the <a href="#" class="text-blue-400 hover:underline">Terms of Service</a> and <a href="#" class="text-blue-400 hover:underline">Privacy Policy</a></label>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200">
+                        {% if plan == 'Free' %}Downgrade to Free Plan{% else %}Confirm & Subscribe{% endif %}
+                    </button>
+                </form>
+                
+                <div class="text-center">
+                    <a href="{% url 'pricing' %}" class="text-gray-400 hover:text-white transition duration-200">
+                        Cancel and return to pricing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

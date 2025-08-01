@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Business Profile - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            {% include 'business/sidebar.html' %}
+        </div>
+        <div class="col-md-9">
+            <div class="glass-card p-8 rounded-2xl shadow-xl mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Edit Business Profile</h2>
+                    <a href="{% url 'business_profile' %}" class="text-white hover:text-gray-300">
+                        <i class="fas fa-arrow-left"></i> Back to Profile
+                    </a>
+                </div>
+
+                {% if messages %}
+                <div class="mb-6">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} p-4 rounded-lg">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'Edit_business_profile' %}" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-white mb-4">User Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="id_username" class="block text-white text-sm font-medium mb-2">Username</label>
+                                {{ user_form.username }}
+                                {% if user_form.username.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ user_form.username.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label for="id_email" class="block text-white text-sm font-medium mb-2">Email</label>
+                                {{ user_form.email }}
+                                {% if user_form.email.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ user_form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-white mb-4">Company Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="id_company_name" class="block text-white text-sm font-medium mb-2">Company Name</label>
+                                {{ business_form.company_name }}
+                                {% if business_form.company_name.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ business_form.company_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label for="id_industry" class="block text-white text-sm font-medium mb-2">Industry</label>
+                                {{ business_form.industry }}
+                                {% if business_form.industry.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ business_form.industry.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label for="id_company_size" class="block text-white text-sm font-medium mb-2">Company Size</label>
+                                {{ business_form.company_size }}
+                                {% if business_form.company_size.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ business_form.company_size.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label for="id_company_website" class="block text-white text-sm font-medium mb-2">Website</label>
+                                {{ business_form.company_website }}
+                                {% if business_form.company_website.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ business_form.company_website.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="id_company_address" class="block text-white text-sm font-medium mb-2">Address</label>
+                                {{ business_form.company_address }}
+                                {% if business_form.company_address.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ business_form.company_address.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-white mb-4">Password Information</h3>
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label for="id_current_password" class="block text-white text-sm font-medium mb-2">Current Password</label>
+                                {{ user_form.current_password }}
+                                <small class="text-gray-400">Required to confirm changes</small>
+                                {% if user_form.current_password.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ user_form.current_password.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label for="id_new_password1" class="block text-white text-sm font-medium mb-2">New Password (Optional)</label>
+                                {{ user_form.new_password1 }}
+                                <small class="text-gray-400">Leave blank if you don't want to change your password</small>
+                                {% if user_form.new_password1.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ user_form.new_password1.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label for="id_new_password2" class="block text-white text-sm font-medium mb-2">Confirm New Password</label>
+                                {{ user_form.new_password2 }}
+                                {% if user_form.new_password2.errors %}
+                                <div class="text-red-400 text-sm mt-1">{{ user_form.new_password2.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <a href="{% url 'business_profile' %}" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                            Cancel
+                        </a>
+                        <button type="submit" class="px-6 py-2 bg-[rgb(12,36,52)] text-white rounded-lg hover:bg-[rgb(10,30,45)] transition">
+                            Update Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control, .form-select {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(79, 70, 229, 0.7);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
+    }
+    
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    }
+    
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .alert {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .alert-success {
+        background: rgba(34, 197, 94, 0.1);
+        border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    .alert-error {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.2);
+    }
+</style>
+{% endblock %}

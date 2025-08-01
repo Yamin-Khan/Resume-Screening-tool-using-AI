@@ -1,0 +1,15 @@
+
+Sophia Jackson
+sophia.jackson@example.com | +1-157-935-3750
+
+SKILLS
+Project Management, AWS, Problem Solving, Django, Leadership, Java, React, Node.js, Machine Learning, Azure
+
+EXPERIENCE
+3 years of experience as a Data Scientist at Microsoft, building machine learning models.
+
+4 years of experience as a Backend Developer at Facebook, optimizing database performance.
+
+EDUCATION
+Bachelor of Engineering, MIT
+            

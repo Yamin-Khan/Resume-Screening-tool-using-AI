@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Job Portal Integration - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex">
+    <!-- Include the sidebar -->
+    {% include 'business/sidebar.html' with active='job_portal' %}
+
+    <div class="flex-1 bg-gray-900">
+        <div class="container mx-auto px-4 py-8">
+            <div class="glass-card p-6 mb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    <a href="{% url 'bulk_screening' %}" class="text-blue-400 hover:text-blue-300">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h1 class="text-2xl font-bold">Job Portal Integration</h1>
+                </div>
+                
+                <p class="text-gray-300 mb-6">Connect to popular job portals to automatically import candidate resumes into our screening system.</p>
+                
+                {% if messages %}
+                <div class="mb-6">
+                    {% for message in messages %}
+                    <div class="p-4 {% if message.tags == 'success' %}bg-green-800/30 border border-green-700{% elif message.tags == 'error' %}bg-red-800/30 border border-red-700{% elif message.tags == 'warning' %}bg-yellow-800/30 border border-yellow-700{% else %}bg-blue-800/30 border border-blue-700{% endif %} rounded-lg">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="flex items-center justify-center pt-10 pb-6">
+                    <div class="text-center">
+                        <div class="flex justify-center mb-4">
+                            <span class="flex items-center justify-center w-20 h-20 bg-blue-900/50 rounded-full">
+                                <i class="fas fa-cogs text-4xl text-blue-400"></i>
+                            </span>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2">Feature Coming Soon</h2>
+                        <p class="text-gray-400 max-w-lg mx-auto mb-8">We're working hard to bring you seamless integrations with popular job portals. This feature will be available in a future update.</p>
+                        <div class="bg-blue-900/20 border border-blue-800 rounded-lg p-4 mb-8 max-w-lg mx-auto">
+                            <p class="text-blue-300">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Want early access? Contact us at support@resumescreening.com
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4">Supported Portals (Coming Soon)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {% for portal in supported_portals %}
+                        <div class="p-6 bg-gray-800/50 rounded-lg border border-white/10 flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                                <i class="fas fa-building text-2xl text-gray-300"></i>
+                            </div>
+                            <h4 class="text-lg font-medium mb-2">{{ portal.name }}</h4>
+                            <span class="px-2 py-1 bg-blue-900 text-blue-300 rounded-full text-xs font-medium">
+                                {{ portal.status }}
+                            </span>
+                            <button class="mt-4 px-4 py-2 bg-gray-700 text-gray-400 rounded-md w-full cursor-not-allowed" disabled>
+                                Connect
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-6 bg-gray-800/50 rounded-lg border border-white/10">
+                    <h3 class="text-xl font-semibold mb-4">Benefits of Job Portal Integration</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <div class="w-12 h-12 bg-green-900/50 rounded-full flex items-center justify-center mb-4">
+                                <i class="fas fa-clock text-xl text-green-400"></i>
+                            </div>
+                            <h4 class="text-lg font-medium mb-2">Save Time</h4>
+                            <p class="text-gray-400">Automatically import resumes without manual downloading and uploading.</p>
+                        </div>
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <div class="w-12 h-12 bg-blue-900/50 rounded-full flex items-center justify-center mb-4">
+                                <i class="fas fa-sync-alt text-xl text-blue-400"></i>
+                            </div>
+                            <h4 class="text-lg font-medium mb-2">Stay Updated</h4>
+                            <p class="text-gray-400">Receive new applicants in real-time as they apply through job portals.</p>
+                        </div>
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <div class="w-12 h-12 bg-purple-900/50 rounded-full flex items-center justify-center mb-4">
+                                <i class="fas fa-chart-line text-xl text-purple-400"></i>
+                            </div>
+                            <h4 class="text-lg font-medium mb-2">Advanced Analytics</h4>
+                            <p class="text-gray-400">Get insights on candidate sources and application trends.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <a href="{% url 'bulk_screening' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Resume Screening
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Business Profile - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            {% include 'business/sidebar.html' %}
+        </div>
+        <div class="col-md-9">
+            <!-- Profile Header -->
+            <div class="glass-card p-8 rounded-2xl shadow-xl mb-8">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-32 h-32 rounded-full bg-gray-200 bg-opacity-20 flex items-center justify-center">
+                        <span class="text-4xl text-white">{{ user.username|first|upper }}</span>
+                    </div>
+                    <div class="md:text-left">
+                        <h1 class="text-3xl font-bold text-white">{{ business_profile.company_name }}</h1>
+                        <p class="text-lg text-white text-opacity-80">{{ user.email }}</p>
+                        <p class="text-md text-white text-opacity-70 mt-1">{{ business_profile.industry }}</p>
+                        <p class="text-md text-white text-opacity-70">{{ business_profile.get_company_size_display }}</p>
+                        <div class="mt-4">
+                            <a href="{% url 'Edit_business_profile' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition font-semibold">
+                                Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card p-6 rounded-2xl shadow-xl text-center transition-transform duration-300 hover:-translate-y-2">
+                    <h3 class="text-xl font-semibold text-white mb-2">Resumes Screened</h3>
+                    <p class="text-3xl font-bold text-blue-400">{{ business_profile.resumes_screened }}</p>
+                    <p class="text-sm text-gray-400 mt-2">Total resumes analyzed</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-xl text-center transition-transform duration-300 hover:-translate-y-2">
+                    <h3 class="text-xl font-semibold text-white mb-2">Subscription</h3>
+                    <p class="text-3xl font-bold text-green-400">{{ business_profile.subscription_plan|capfirst }}</p>
+                    <p class="text-sm text-gray-400 mt-2">
+                        {% if business_profile.is_subscription_active %}
+                        <span class="px-2 py-1 bg-green-500 bg-opacity-20 text-green-400 rounded-full text-xs">Active</span>
+                        {% else %}
+                        <span class="px-2 py-1 bg-red-500 bg-opacity-20 text-red-400 rounded-full text-xs">Expired</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-xl text-center transition-transform duration-300 hover:-translate-y-2">
+                    <h3 class="text-xl font-semibold text-white mb-2">Remaining Quota</h3>
+                    <p class="text-3xl font-bold text-yellow-400">{{ business_profile.get_remaining_resumes }}</p>
+                    <p class="text-sm text-gray-400 mt-2">of {{ business_profile.resumes_limit }} total</p>
+                    <!-- Progress bar -->
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-3">
+                        {% widthratio business_profile.resumes_screened business_profile.resumes_limit 100 as usage_percent %}
+                        <div class="bg-yellow-400 h-2 rounded-full" style="width: {{ usage_percent }}%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Details -->
+            <div class="glass-card p-8 rounded-2xl shadow-xl mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Company Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <h3 class="text-white text-opacity-70 text-sm">Website</h3>
+                        <p class="text-white font-medium">{{ business_profile.company_website|default:"Not provided" }}</p>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="text-white text-opacity-70 text-sm">Address</h3>
+                        <p class="text-white font-medium">{{ business_profile.company_address|default:"Not provided" }}</p>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="text-white text-opacity-70 text-sm">Account Created</h3>
+                        <p class="text-white font-medium">{{ business_profile.created_at|date:"F j, Y" }}</p>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="text-white text-opacity-70 text-sm">Subscription Status</h3>
+                        <p class="text-white font-medium">
+                            {% if business_profile.is_subscription_active %}
+                            <span class="text-green-400">Active</span>
+                            {% else %}
+                            <span class="text-red-400">Expired</span>
+                            {% endif %}
+                            {% if business_profile.subscription_end %}
+                             - Expires {{ business_profile.subscription_end|date:"F j, Y" }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscription Actions -->
+            <div class="glass-card p-8 rounded-2xl shadow-xl mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white">Subscription Management</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-3">Current Plan: {{ business_profile.subscription_plan|capfirst }}</h3>
+                        <p class="text-gray-300 mb-4">
+                            {% if business_profile.subscription_plan == 'free' %}
+                            You are currently on the Free plan with limited features. Upgrade to unlock more resume screenings and advanced features.
+                            {% elif business_profile.subscription_plan == 'standard' %}
+                            You are on the Standard plan. You can upgrade to Premium for unlimited resume screenings.
+                            {% elif business_profile.subscription_plan == 'premium' %}
+                            You are on our Premium plan with all features unlocked.
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'pricing' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition font-semibold inline-block">
+                            View Plans & Upgrade
+                        </a>
+                    </div>
+                    <div class="glass-card bg-opacity-30 p-5 rounded-xl">
+                        <h3 class="text-lg font-semibold text-white mb-3">Usage Summary</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-300">Resumes Screened</span>
+                                    <span class="text-white">{{ business_profile.resumes_screened }}</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-1.5">
+                                    {% widthratio business_profile.resumes_screened business_profile.resumes_limit 100 as usage_percent %}
+                                    <div class="bg-blue-400 h-1.5 rounded-full" style="width: {{ usage_percent }}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-300">Remaining Quota</span>
+                                    <span class="text-white">{{ business_profile.get_remaining_resumes }} / {{ business_profile.resumes_limit }}</span>
+                                </div>
+                            </div>
+                            {% if business_profile.subscription_end %}
+                            <div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-300">Subscription Renews</span>
+                                    <span class="text-white">{{ business_profile.subscription_end|date:"F j, Y" }}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control, .form-select {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(79, 70, 229, 0.7);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
+    }
+    
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    }
+    
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+</style>
+{% endblock %} 

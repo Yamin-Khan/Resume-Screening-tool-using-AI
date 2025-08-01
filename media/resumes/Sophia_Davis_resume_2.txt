@@ -1,0 +1,17 @@
+
+Sophia Davis
+sophia.davis@example.com | +1-464-236-9806
+
+SKILLS
+Problem Solving, Java, Docker, Machine Learning, SQL, Python
+
+EXPERIENCE
+2 years of experience as a Frontend Developer at Amazon, creating responsive web interfaces.
+
+5 years of experience as a Software Engineer at Google, developing scalable cloud solutions.
+
+4 years of experience as a Backend Developer at Facebook, optimizing database performance.
+
+EDUCATION
+Bachelor of Arts in Communication, Columbia University
+            

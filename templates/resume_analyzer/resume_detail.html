@@ -1,0 +1,354 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Resume Analysis Details - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto">
+        <div class="max-w-5xl mx-auto">
+            <div class="glass-card p-8 rounded-xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-white">Resume Analysis</h1>
+                    <div class="flex gap-2">
+                        <a href="{% url 'user_resume_list' %}" class="bg-white/10 hover:bg-white/20 text-white font-medium px-4 py-2 rounded-lg flex items-center gap-1 transition">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <button id="download-report" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg flex items-center gap-1 transition">
+                            <i class="fas fa-download"></i> Download Report
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white/5 rounded-lg p-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <p class="text-gray-400 text-sm mb-1">Resume File</p>
+                            <p class="text-white font-medium">{{ analysis.file_name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm mb-1">Job Title</p>
+                            <p class="text-white font-medium">{{ analysis.job_title|default:"Not specified" }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm mb-1">Industry</p>
+                            <p class="text-white font-medium">{{ analysis.industry|default:"Not specified" }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Score Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white/10 rounded-lg p-6 text-center">
+                        <h3 class="text-lg font-medium text-white mb-4">ATS Score</h3>
+                        <div class="relative mx-auto w-40 h-40">
+                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                <path class="stroke-2 stroke-slate-600 fill-none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="stroke-2 
+                                    {% if analysis.ats_score >= 80 %}
+                                    stroke-green-400
+                                    {% elif analysis.ats_score >= 60 %}
+                                    stroke-blue-400
+                                    {% elif analysis.ats_score >= 40 %}
+                                    stroke-yellow-400
+                                    {% else %}
+                                    stroke-red-400
+                                    {% endif %}
+                                    fill-none" 
+                                    stroke-dasharray="{{ analysis.ats_score }}, 100" 
+                                    stroke-linecap="round" 
+                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <text x="20" y="22.5" class="text-xsm font-bold text-white" text-anchor="middle">{{ analysis.ats_score }}%</text>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-300 mt-4 max-w-xs mx-auto">
+                            {% if analysis.ats_score >= 80 %}
+                                Excellent! Your resume is well-optimized for ATS systems and is likely to pass through screening software.
+                            {% elif analysis.ats_score >= 60 %}
+                                Good. Your resume should pass most ATS systems, but there's room for improvement.
+                            {% elif analysis.ats_score >= 40 %}
+                                Average. Your resume might encounter issues with some ATS systems. Consider making the suggested improvements.
+                            {% else %}
+                                Needs work. Your resume may not pass many ATS systems in its current form.
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white/10 rounded-lg p-6 text-center">
+                        <h3 class="text-lg font-medium text-white mb-4">Predicted Role</h3>
+                        <div class="mb-4">
+                            <div class="text-2xl font-semibold text-orange-400">
+                                {{ ai_analysis.predicted_role|default:"Not Predicted" }}
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <h4 class="text-sm font-medium text-gray-400 mb-2">Confidence Score</h4>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5 mb-2">
+                                <div class="h-2.5 rounded-full bg-purple-500" style="width: {{ ai_analysis.confidence_score }}%"></div>
+                            </div>
+                            <p class="text-gray-300 text-sm">{{ ai_analysis.confidence_score }}%</p>
+                        </div>
+                        <p class="text-sm text-gray-300 mt-4 max-w-xs mx-auto">
+                            Based on your resume content, our AI predicts this as the most suitable role for your profile.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white/10 rounded-lg p-6">
+                        <h3 class="text-lg font-medium text-white mb-4">Skills Summary</h3>
+                        
+                        <div class="space-y-6">
+                            <!-- Technical Skills -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Technical Skills</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for skill in analysis.get_technical_skills %}
+                                    <span class="bg-blue-900/30 text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-800">{{ skill }}</span>
+                                    {% empty %}
+                                    <span class="text-gray-400 text-sm">No technical skills detected</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Soft Skills -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Soft Skills</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for skill in analysis.get_soft_skills %}
+                                    <span class="bg-purple-900/30 text-purple-300 text-xs px-3 py-1 rounded-full border border-purple-800">{{ skill }}</span>
+                                    {% empty %}
+                                    <span class="text-gray-400 text-sm">No soft skills detected</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Missing Skills -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Missing Skills</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for skill in analysis.get_missing_skills %}
+                                    <span class="bg-red-900/30 text-red-300 text-xs px-3 py-1 rounded-full border border-red-800">{{ skill }}</span>
+                                    {% empty %}
+                                    <span class="text-gray-400 text-sm">No missing skills detected</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Analysis Details -->
+                <div class="space-y-6">
+                    <!-- Improvement Areas -->
+                    <div class="bg-white/5 rounded-lg p-6">
+                        <h3 class="text-lg font-medium text-white mb-4 flex items-center">
+                            <i class="fas fa-exclamation-circle text-yellow-400 mr-2"></i>
+                            Improvement Areas
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            {% for improvement in analysis.get_improvement_areas %}
+                            <div class="flex items-start">
+                                <i class="fas fa-arrow-right text-yellow-400 mt-1 mr-3"></i>
+                                <p class="text-gray-300">{{ improvement }}</p>
+                            </div>
+                            {% empty %}
+                            <p class="text-gray-400">No specific improvement areas identified.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Analysis -->
+                    <div class="bg-white/5 rounded-lg p-6">
+                        <h3 class="text-lg font-medium text-white mb-4 flex items-center">
+                            <i class="fas fa-briefcase text-blue-400 mr-2"></i>
+                            Experience Analysis
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Relevance Score</h4>
+                                <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-3 bg-blue-500 rounded-full" style="width: {{ analysis.analysis_data.ai_analysis.experience_relevance.relevance_score }}%"></div>
+                                </div>
+                                <p class="text-right text-sm text-gray-400 mt-1">{{ analysis.analysis_data.ai_analysis.experience_relevance.relevance_score }}%</p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Key Experiences</h4>
+                                <ul class="space-y-2 pl-6 list-disc text-gray-300">
+                                    {% for experience in analysis.analysis_data.ai_analysis.experience_relevance.key_experiences %}
+                                    <li>{{ experience }}</li>
+                                    {% empty %}
+                                    <li class="text-gray-400">No key experiences identified</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Experience Gaps</h4>
+                                <ul class="space-y-2 pl-6 list-disc text-gray-300">
+                                    {% for gap in analysis.analysis_data.ai_analysis.experience_relevance.gaps %}
+                                    <li>{{ gap }}</li>
+                                    {% empty %}
+                                    <li class="text-gray-400">No significant experience gaps identified</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Download report button
+        document.getElementById('download-report').addEventListener('click', function() {
+            try {
+                // Create the report content
+                const analysisDataStr = '{{ analysis.analysis_data|escapejs }}';
+                const analysisData = analysisDataStr ? JSON.parse(analysisDataStr) : {};
+                
+                let report = `
+RESUME ANALYSIS REPORT
+=====================
+
+Resume: {{ analysis.file_name }}
+Date: {{ analysis.created_at|date:"F j, Y" }}
+{% if analysis.job_title %}Job Title: {{ analysis.job_title }}{% endif %}
+{% if analysis.industry %}Industry: {{ analysis.industry }}{% endif %}
+
+ATS SCORE: {{ analysis.ats_score }}%
+
+SKILLS ANALYSIS
+--------------`;
+
+                // Add technical skills if they exist
+                report += "\nTechnical Skills:";
+                if (analysisData && analysisData.ai_analysis && analysisData.ai_analysis.skills_analysis && 
+                    Array.isArray(analysisData.ai_analysis.skills_analysis.technical_skills)) {
+                    report += "\n" + analysisData.ai_analysis.skills_analysis.technical_skills.join('\n');
+                } else {
+                    report += "\nNone detected";
+                }
+                
+                // Add soft skills if they exist
+                report += "\n\nSoft Skills:";
+                if (analysisData && analysisData.ai_analysis && analysisData.ai_analysis.skills_analysis && 
+                    Array.isArray(analysisData.ai_analysis.skills_analysis.soft_skills)) {
+                    report += "\n" + analysisData.ai_analysis.skills_analysis.soft_skills.join('\n');
+                } else {
+                    report += "\nNone detected";
+                }
+                
+                // Add missing skills if they exist
+                report += "\n\nMissing Skills:";
+                if (analysisData && analysisData.ai_analysis && analysisData.ai_analysis.skills_analysis && 
+                    Array.isArray(analysisData.ai_analysis.skills_analysis.missing_skills)) {
+                    report += "\n" + analysisData.ai_analysis.skills_analysis.missing_skills.join('\n');
+                } else {
+                    report += "\nNone detected";
+                }
+                
+                // Add experience relevance if it exists
+                report += "\n\nEXPERIENCE RELEVANCE\n------------------";
+                if (analysisData && analysisData.ai_analysis && analysisData.ai_analysis.experience_relevance) {
+                    report += "\nRelevance Score: " + (analysisData.ai_analysis.experience_relevance.relevance_score || 0) + "%";
+                    
+                    report += "\n\nKey Experiences:";
+                    if (Array.isArray(analysisData.ai_analysis.experience_relevance.key_experiences)) {
+                        report += "\n" + analysisData.ai_analysis.experience_relevance.key_experiences.join('\n');
+                    } else {
+                        report += "\nNone detected";
+                    }
+                    
+                    report += "\n\nExperience Gaps:";
+                    if (Array.isArray(analysisData.ai_analysis.experience_relevance.gaps)) {
+                        report += "\n" + analysisData.ai_analysis.experience_relevance.gaps.join('\n');
+                    } else {
+                        report += "\nNone detected";
+                    }
+                } else {
+                    report += "\nNo experience analysis available";
+                }
+                
+                // Add improvement areas if they exist
+                report += "\n\nIMPROVEMENT AREAS\n----------------";
+                if (analysisData && analysisData.ai_analysis && Array.isArray(analysisData.ai_analysis.improvement_areas)) {
+                    report += "\n" + analysisData.ai_analysis.improvement_areas.join('\n');
+                } else {
+                    report += "\nNo specific improvement areas identified";
+                }
+                
+                // Add keyword optimization if it exists
+                report += "\n\nKEYWORD OPTIMIZATION\n------------------";
+                if (analysisData && analysisData.ai_analysis && Array.isArray(analysisData.ai_analysis.keyword_optimization)) {
+                    report += "\n" + analysisData.ai_analysis.keyword_optimization.join('\n');
+                } else {
+                    report += "\nNo keyword optimization suggestions";
+                }
+                
+                // Create a Blob with the report text
+                const blob = new Blob([report], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                // Create a temporary link and click it to download the file
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'resume_analysis_report_{{ analysis.id }}.txt';
+                document.body.appendChild(a);
+                a.click();
+                
+                // Clean up
+                URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error("Error generating report:", error);
+                alert("There was an error generating the report. Please try again later.");
+            }
+        });
+
+        // Fetch fresh AI analysis data
+        fetch('/api/analyze-resume', {
+            method: 'POST',
+            body: new FormData(document.createElement('form')),
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            }
+        })
+        .then(response => {
+            if (response.ok) return response.json();
+            throw new Error('API response error');
+        })
+        .then(data => {
+            if (data.predicted_role) {
+                document.querySelector('.text-orange-400').textContent = data.predicted_role;
+            }
+            if (data.confidence_score) {
+                const confidenceBar = document.querySelector('.bg-purple-500');
+                confidenceBar.style.width = `${data.confidence_score}%`;
+                confidenceBar.parentElement.nextElementSibling.textContent = `${data.confidence_score}%`;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching AI prediction:', error);
+        });
+    });
+</script>
+{% endblock %} 

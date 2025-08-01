@@ -1,0 +1,479 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload & Analyze Resume - Resume Screening Tool{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto">
+        <div class="max-w-5xl mx-auto">
+            <div class="glass-card p-8 rounded-xl">
+                <h1 class="text-3xl font-bold text-white text-center mb-6">Resume Analysis Tool</h1>
+                <p class="text-lg text-white/80 text-center mb-10">Upload your resume to get an in-depth analysis, ATS score, and improvement suggestions</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Upload Area -->
+                    <div>
+                        <div class="bg-white/5 rounded-xl border border-white/20 p-6">
+                            <h2 class="text-xl font-semibold text-white mb-4">Upload Your Resume</h2>
+                            
+                            <form id="resume-form" class="space-y-6" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                <div class="bg-white/5 border border-white/20 rounded-lg p-6">
+                                    <div class="flex items-center justify-center w-full">
+                                        <label for="resume-file" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-white/5 border-white/20 hover:bg-white/10">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                                                <p class="mb-2 text-sm text-gray-300"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                                <p class="text-xs text-gray-400">PDF, DOCX, or TXT (MAX. 5MB)</p>
+                                            </div>
+                                            <input id="resume-file" name="resume" type="file" class="hidden" accept=".pdf,.docx,.doc,.txt" />
+                                        </label>
+                                    </div>
+                                    <div id="file-name-container" class="mt-3 text-center hidden">
+                                        <p class="text-sm text-gray-300">Selected file: <span id="file-name" class="font-semibold"></span></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="job-title" class="block text-sm font-medium text-white mb-1">Job Title (Optional)</label>
+                                        <input type="text" id="job-title" name="job_title" placeholder="e.g. Software Engineer, Marketing Manager" 
+                                               class="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                        <p class="text-xs text-gray-400 mt-1">Adding a job title helps us tailor your analysis</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="industry" class="block text-sm font-medium text-white mb-1">Industry (Optional)</label>
+                                        <select id="industry" name="industry" 
+                                                class="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-black focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                            <option value="">Select an industry</option>
+                                            <option value="tech">Technology</option>
+                                            <option value="finance">Finance & Banking</option>
+                                            <option value="healthcare">Healthcare</option>
+                                            <option value="marketing">Marketing & Advertising</option>
+                                            <option value="education">Education</option>
+                                            <option value="manufacturing">Manufacturing</option>
+                                            <option value="retail">Retail</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="pt-4">
+                                    <button type="submit" id="analyze-button" class="w-full bg-[rgb(12,36,52)] hover:bg-[rgb(10,30,45)] text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition" disabled>
+                                        <i class="fas fa-robot"></i> Analyze Resume
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="mt-8 bg-white/5 rounded-xl border border-white/20 p-6">
+                            <h2 class="text-xl font-semibold text-white mb-4">Why Use Our Tool?</h2>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-chart-line text-blue-400 mt-1 mr-3"></i>
+                                    <div>
+                                        <h3 class="font-medium">ATS Compatibility</h3>
+                                        <p class="text-sm text-gray-300">See how well your resume performs with Applicant Tracking Systems</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-search text-green-400 mt-1 mr-3"></i>
+                                    <div>
+                                        <h3 class="font-medium">Keyword Analysis</h3>
+                                        <p class="text-sm text-gray-300">Identify missing industry keywords to improve your chances</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-lightbulb text-yellow-400 mt-1 mr-3"></i>
+                                    <div>
+                                        <h3 class="font-medium">Personalized Suggestions</h3>
+                                        <p class="text-sm text-gray-300">Get actionable tips to improve your resume</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Results Area (Initially Hidden) -->
+                    <div id="results-container" class="hidden mt-8 animate-fade-in">
+                        <div class="bg-gray-800/30 rounded-xl p-6 border border-gray-700/40 shadow-2xl transition-all duration-500">
+                            <!-- Score Overview -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <!-- ATS Score -->
+                                <div class="bg-white/5 rounded-lg p-4">
+                                    <h3 class="text-gray-400 text-sm mb-2">ATS Score</h3>
+                                    <div class="flex items-center">
+                                        <div class="w-2/3 bg-gray-700 rounded-full h-2.5 mr-3">
+                                            <div id="ats-score-path" class="h-2.5 rounded-full bg-blue-500 transition-all duration-700" style="width: 0%"></div>
+                                        </div>
+                                        <span id="ats-score-text" class="text-xl font-semibold text-blue-400">0%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Content Score -->
+                                <div class="bg-white/5 rounded-lg p-4">
+                                    <h3 class="text-gray-400 text-sm mb-2">Content Score</h3>
+                                    <div class="flex items-center">
+                                        <div class="w-2/3 bg-gray-700 rounded-full h-2.5 mr-3">
+                                            <div id="content-score-path" class="h-2.5 rounded-full bg-green-500 transition-all duration-700" style="width: 0%"></div>
+                                        </div>
+                                        <span id="content-score-text" class="text-xl font-semibold text-green-400">0%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Keywords Score -->
+                                <div class="bg-white/5 rounded-lg p-4">
+                                    <h3 class="text-gray-400 text-sm mb-2">Keywords Score</h3>
+                                    <div class="flex items-center">
+                                        <div class="w-2/3 bg-gray-700 rounded-full h-2.5 mr-3">
+                                            <div id="keyword-score-path" class="h-2.5 rounded-full bg-purple-500 transition-all duration-700" style="width: 0%"></div>
+                                        </div>
+                                        <span id="keyword-score-text" class="text-xl font-semibold text-purple-400">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Scores -->
+                            <div class="bg-white/5 rounded-lg p-6 mb-8">
+                                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                                    <i class="fas fa-chart-bar text-blue-400 mr-2"></i> Detailed Analysis
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex-1">
+                                            <h4 class="text-gray-400 text-sm">Job Match Score</h4>
+                                            <div class="text-xl font-semibold text-blue-400" id="job-match-score">N/A</div>
+                                        </div>
+                                        <div class="w-1/2 bg-gray-700 rounded-full h-2.5">
+                                            <div id="job-match-score-bar" class="h-2.5 rounded-full bg-blue-500 transition-all duration-700" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex-1">
+                                            <h4 class="text-gray-400 text-sm">Resume Ranking</h4>
+                                            <div class="text-xl font-semibold text-green-400" id="resume-ranking">N/A</div>
+                                        </div>
+                                        <div class="w-1/2 bg-gray-700 rounded-full h-2.5">
+                                            <div id="resume-ranking-bar" class="h-2.5 rounded-full bg-green-500 transition-all duration-700" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex-1">
+                                            <h4 class="text-gray-400 text-sm">Confidence Score</h4>
+                                            <div class="text-xl font-semibold text-purple-400" id="confidence-score">N/A</div>
+                                        </div>
+                                        <div class="w-1/2 bg-gray-700 rounded-full h-2.5">
+                                            <div id="confidence-score-bar" class="h-2.5 rounded-full bg-purple-500 transition-all duration-700" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center">
+                                        <div class="flex-1">
+                                            <h4 class="text-gray-400 text-sm">Predicted Role</h4>
+                                            <div class="text-xl font-semibold text-orange-400" id="predicted-role">N/A</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Strengths & Improvements -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white/5 rounded-lg p-4">
+                                    <h3 class="text-lg font-semibold text-white mb-3 flex items-center">
+                                        <i class="fas fa-check-circle text-green-400 mr-2"></i> Strengths
+                                    </h3>
+                                    <ul id="strengths-list" class="space-y-2 pl-6 list-disc text-green-300"></ul>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-4">
+                                    <h3 class="text-lg font-semibold text-white mb-3 flex items-center">
+                                        <i class="fas fa-exclamation-circle text-yellow-400 mr-2"></i> Areas for Improvement
+                                    </h3>
+                                    <ul id="improvements-list" class="space-y-2 pl-6 list-disc text-yellow-200"></ul>
+                                </div>
+                            </div>
+
+                            <!-- Skills and Keywords -->
+                            <div class="mt-6">
+                                <h3 class="text-lg font-semibold text-white mb-3 flex items-center">
+                                    <i class="fas fa-key text-blue-400 mr-2"></i> Skills & Keywords Analysis
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="text-gray-400 text-sm mb-2">Found Keywords</h4>
+                                        <div id="found-keywords" class="flex flex-wrap gap-2"></div>
+                                    </div>
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="text-gray-400 text-sm mb-2">Missing Keywords</h4>
+                                        <div id="missing-keywords" class="flex flex-wrap gap-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Experience Analysis -->
+                            <div class="mt-6">
+                                <h3 class="text-lg font-semibold text-white mb-3 flex items-center">
+                                    <i class="fas fa-briefcase text-purple-400 mr-2"></i> Experience Analysis
+                                </h3>
+                                <div id="key-experiences" class="space-y-2 pl-6 list-disc text-gray-300"></div>
+                            </div>
+
+                            <!-- Download Report Button -->
+                            <div class="mt-6 text-center">
+                                <button id="download-report" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 mx-auto">
+                                    <i class="fas fa-download"></i> Download Analysis Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const resumeFile = document.getElementById('resume-file');
+        const fileNameContainer = document.getElementById('file-name-container');
+        const fileName = document.getElementById('file-name');
+        const analyzeButton = document.getElementById('analyze-button');
+        const resumeForm = document.getElementById('resume-form');
+        const resultsContainer = document.getElementById('results-container');
+        
+        // Global variable to store analysis results for download
+        let analysisResults = null;
+        
+        // File input handling
+        resumeFile.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                fileName.textContent = file.name;
+                fileNameContainer.classList.remove('hidden');
+                analyzeButton.disabled = false;
+            } else {
+                fileNameContainer.classList.add('hidden');
+                analyzeButton.disabled = true;
+            }
+        });
+        
+        // Form submission
+        resumeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            analyzeButton.disabled = true;
+            analyzeButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            
+            // Send the form data to the API
+            const formData = new FormData(resumeForm);
+            
+            fetch('/resume/api/analyze-resume', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Store the analysis results for download
+                analysisResults = data;
+                
+                // Debug the response data
+                console.log('Raw response data:', data);
+                
+                // Display the results
+                displayResults(data);
+                
+                // Show the results container
+                resultsContainer.classList.remove('hidden');
+                
+                // Scroll to results on mobile
+                if (window.innerWidth < 1024) {
+                    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error analyzing resume: ' + error.message);
+            })
+            .finally(() => {
+                // Reset button state
+                analyzeButton.disabled = false;
+                analyzeButton.innerHTML = '<i class="fas fa-robot"></i> Analyze Resume';
+            });
+        });
+        
+        // Function to display results
+        function displayResults(data) {
+            // Update scores
+            document.getElementById('ats-score-path').style.width = `${data.ats_score}%`;
+            document.getElementById('ats-score-text').textContent = `${data.ats_score}%`;
+            document.getElementById('content-score-path').style.width = `${data.analysis.content_score}%`;
+            document.getElementById('content-score-text').textContent = `${data.analysis.content_score}%`;
+            document.getElementById('keyword-score-path').style.width = `${data.analysis.keywords_score}%`;
+            document.getElementById('keyword-score-text').textContent = `${data.analysis.keywords_score}%`;
+
+            // New score updates
+            if (data.job_match_score) {
+                document.getElementById('job-match-score').textContent = `${data.job_match_score}%`;
+                document.getElementById('job-match-score-bar').style.width = `${data.job_match_score}%`;
+            }
+            
+            if (data.resume_ranking) {
+                document.getElementById('resume-ranking').textContent = data.resume_ranking;
+                // Assuming ranking is out of 10, adjust the bar accordingly
+                const rankingPercentage = (parseFloat(data.resume_ranking) / 10) * 100;
+                document.getElementById('resume-ranking-bar').style.width = `${rankingPercentage}%`;
+            }
+            
+            if (data.confidence_score) {
+                document.getElementById('confidence-score').textContent = `${data.confidence_score}%`;
+                document.getElementById('confidence-score-bar').style.width = `${data.confidence_score}%`;
+            }
+            
+            if (data.predicted_role) {
+                document.getElementById('predicted-role').textContent = data.predicted_role;
+            }
+
+            // Update strengths
+            const strengthsList = document.getElementById('strengths-list');
+            strengthsList.innerHTML = '';
+            data.analysis.strengths.forEach(strength => {
+                const li = document.createElement('li');
+                li.textContent = strength;
+                strengthsList.appendChild(li);
+            });
+
+            // Update improvements
+            const improvementsList = document.getElementById('improvements-list');
+            improvementsList.innerHTML = '';
+            data.analysis.improvements.forEach(improvement => {
+                const li = document.createElement('li');
+                li.textContent = improvement;
+                improvementsList.appendChild(li);
+            });
+
+            // Update keywords
+            const foundKeywords = document.getElementById('found-keywords');
+            const missingKeywords = document.getElementById('missing-keywords');
+            foundKeywords.innerHTML = '';
+            missingKeywords.innerHTML = '';
+            
+            data.analysis.keywords.forEach(keyword => {
+                const span = document.createElement('span');
+                span.className = `px-3 py-1 rounded-full text-sm ${keyword.found ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`;
+                span.textContent = keyword.name;
+                (keyword.found ? foundKeywords : missingKeywords).appendChild(span);
+            });
+
+            // Update experience
+            const keyExperiences = document.getElementById('key-experiences');
+            keyExperiences.innerHTML = '';
+            data.analysis.experience.forEach(exp => {
+                const li = document.createElement('li');
+                li.textContent = exp;
+                keyExperiences.appendChild(li);
+            });
+        }
+        
+        // Download report button
+        document.getElementById('download-report').addEventListener('click', function() {
+            if (!analysisResults) {
+                alert('No analysis results available to download');
+                return;
+            }
+            
+            const report = `
+RESUME ANALYSIS REPORT
+=====================
+
+SCORES
+------
+ATS Score: ${analysisResults.ats_score}%
+Content Score: ${analysisResults.analysis.content_score}%
+Keywords Score: ${analysisResults.analysis.keywords_score}%
+Job Match Score: ${analysisResults.job_match_score || 'N/A'}%
+Resume Ranking: ${analysisResults.resume_ranking || 'N/A'}
+Confidence Score: ${analysisResults.confidence_score || 'N/A'}%
+Predicted Role: ${analysisResults.predicted_role || 'N/A'}
+
+STRENGTHS
+---------
+${analysisResults.analysis.strengths.join('\n')}
+
+AREAS FOR IMPROVEMENT
+--------------------
+${analysisResults.analysis.improvements.join('\n')}
+
+KEYWORDS ANALYSIS
+----------------
+Found Keywords:
+${analysisResults.analysis.keywords.filter(k => k.found).map(k => k.name).join(', ')}
+
+Missing Keywords:
+${analysisResults.analysis.keywords.filter(k => !k.found).map(k => k.name).join(', ')}
+
+EXPERIENCE ANALYSIS
+------------------
+${analysisResults.analysis.experience.join('\n')}
+            `;
+            
+            // Create a Blob with the report text
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            // Create a temporary link and click it to download the file
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resume_analysis_report.txt';
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        });
+        
+        // Helper function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
