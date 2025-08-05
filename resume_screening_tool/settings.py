@@ -147,7 +147,7 @@ EMAIL_HOST = 'smtp.gmail.com'  # For Gmail
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'formoviesdownload01@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = 'vxvk grej hjfn mplt'  # Replace with your app password
+EMAIL_HOST_PASSWORD = ''  # Replace with your app password
 DEFAULT_FROM_EMAIL = 'AVIVA <noreply@avivarecruitment.com>'
 SERVER_EMAIL = 'noreply@avivarecruitment.com'
 
